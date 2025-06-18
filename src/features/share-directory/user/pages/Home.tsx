@@ -1,4 +1,4 @@
-import styles from "./Home.module.scss";
+// import styles from "./Home.module.scss";
 import { Carousel, Col, Row } from "antd";
 import slider3 from "@repo/assets/images/slider_3.webp";
 import slider5 from "@repo/assets/images/slider_5.webp";
