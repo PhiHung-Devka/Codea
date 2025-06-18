@@ -1,0 +1,47 @@
+@use './variables' as *;
+
+// responsive 411 -> max
+@mixin responsive-sm {
+    @media screen and (min-width: $codea-sm) {
+        @content;
+    }
+}
+
+// responsive 768 -> max
+@mixin responsive-md {
+    @media screen and (min-width: $codea-md) {
+        @content;
+    }
+}
+
+// responsive 834 -> max
+@mixin responsive-lg {
+    @media screen and (min-width: $codea-lg) {
+        @content;
+    }
+}
+
+// responsive 1440 -> max
+@mixin responsive-xl {
+    @media screen and (min-width: $codea-xl) {
+        @content;
+    }
+}
+
+@mixin typography($color, $font-size, $font-weight, $line-height) {
+    color: $color;
+    font-size: $font-size;
+    font-weight: $font-weight;
+    line-height: $line-height;
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+}
+
+@mixin globalStyles {
+    :global {
+        @content;
+    }
+}

@@ -1,0 +1,180 @@
+// *** FONT SIZE ***
+$font-size-4xs: 10px;
+$font-size-3xs: 12px;
+$font-size-2xs: 14px;
+$font-size-xs: 16px;
+$font-size-2sm: 18px;
+$font-size-sm: 20px;
+$font-size-md: 24px;
+$font-size-lg: 32px;
+$font-size-xl: 42px;
+$font-size-xxl: 56px;
+// *** END FONT SIZE ***
+
+// *** FONT WEIGHT ***
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+// *** END FONT WEIGHT ***
+
+// *** LINE HEIGHT ***
+$line-height-4xs: 1.4;
+$line-height-3xs: 1.33;
+$line-height-2xs: 1.43;
+$line-height-xs: 1.5;
+$line-height-2sm: 1.33;
+$line-height-sm: 1.4;
+$line-height-md: 1.25;
+$line-height-lg: 1.19;
+$line-height-xl: 1.19;
+$line-height-xxl: 1.11;
+// *** END LINE HEIGHT ***
+
+// *** SPACING ***
+$padding-container-xs: 16px;
+$padding-container-sm: 16px;
+$padding-container-md: 16px;
+$padding-container-lg: 24px;
+$padding-container-xl: 32px;
+
+$gap-xs: 4px;
+$gap-sm: 8px;
+$gap-md: 12px;
+$gap-lg: 16px;
+$gap-xl: 20px;
+
+$padding-xs: 4px;
+$padding-sm: 8px;
+$padding-md: 12px;
+$padding-lg: 16px;
+$padding-xl: 20px;
+$padding-2xl: 24px;
+$padding-3xl: 28px;
+$padding-4xl: 32px;
+$padding-5xl: 36px;
+$padding-6xl: 40px;
+$padding-7xl: 48px;
+// *** END SPACING ***
+
+// *** BREAK POINT ***
+$codea-xs: 320px;
+$codea-xspb: $codea-xs - 1;
+$codea-sm: 411px;
+$codea-smpb: $codea-sm - 1;
+$codea-md: 768px;
+$codea-mdpb: $codea-md - 1;
+$codea-lg: 834px;
+$codea-lgpb: $codea-lg - 1;
+$codea-xl: 1440px;
+$codea-xlpb: $codea-xl - 1;
+// *** END BREAK POINT ***
+
+// *** COLOR ***
+$color-gray-scale-5: #f7f8f9;
+$color-gray-scale-10: #f1f2f4;
+$color-gray-scale-20: #dcdfe4;
+$color-gray-scale-30: #b3b9c4;
+$color-gray-scale-40: #8590a2;
+$color-gray-scale-50: #758195;
+$color-gray-scale-60: #626f86;
+$color-gray-scale-70: #44546f;
+$color-gray-scale-80: #2c3e5d;
+$color-gray-scale-90: #172a48;
+$color-gray-scale-100: #011129;
+
+$color-disabled-text: #8E96A5;
+$color-secondary-text: #626F86;
+$color-body-text: #2C3E5D;
+$color-heading-text: #011129;
+$color-highlight-text: #003372;
+
+$color-base-stroke: #DDE4EE;
+$color-base-background: #f4f6fa;
+$color-base-white: #fff;
+
+$color-main-primary: #00bbff;
+$color-main-text-primary: #0091d4;
+
+$color-primary-10: #f2f7ff;
+$color-primary-100: #f8fafd;
+$color-primary-200: #eaf2ff;
+$color-primary-300: #abccff;
+$color-primary-400: #2c80ff;
+$color-primary-500: #005de6;
+
+$color-primary-blur-100: #00adec14;
+
+$color-green-100: #f9fbf9;
+$color-green-200: #f1fbf5;
+$color-green-300: #99d9b3;
+$color-green-400: #00a141;
+$color-green-500: #008f3a;
+
+$color-green-blur-100: #0c800114;
+
+$color-red-100: #fbf9f9;
+$color-red-200: #fff6f6;
+$color-red-300: #f3a5a0;
+$color-red-400: #e21d12;
+$color-red-500: #c40900;
+
+$color-yellow-100: #fbfbf9;
+$color-yellow-200: #fff9e6;
+$color-yellow-300: #ffe999;
+$color-yellow-400: #ffc700;
+$color-yellow-500: #dcab00;
+
+$color-orange-100: #fbfaf9;
+$color-orange-200: #fff7f1;
+$color-orange-300: #ffcba6;
+$color-orange-400: #ff8a1e;
+$color-orange-500: #de5e00;
+
+$color-violet-100: #faf9fb;
+$color-violet-200: #f9f7ff;
+$color-violet-300: #d9c8f8;
+$color-violet-400: #a075ee;
+$color-violet-500: #784dc7;
+
+$color-violet-blur-100: #4061da14;
+
+$color-black-100: #333333;
+// *** END COLOR ***
+
+// *** BOX SHADOW ***
+$box-shadow-sm: 0px 1px 2px 0px rgba(26, 59, 108, 0.25);
+$box-shadow-md: 0px 3px 4px 0px rgba(26, 59, 108, 0.25);
+$box-shadow-lg: 0px 8px 12px 0px rgba(26, 59, 108, 0.25);
+$box-shadow-xl: 0px 18px 28px 0px rgba(26, 59, 108, 0.25);
+$box-shadow-2xl: 0px 8px 12px 0px rgba(3, 52, 125, 0.1);
+$box-shadow-3xl: 4px 4px 20px 0px rgba(32, 73, 109, 0.1);
+$box-shadow-dropdown: 0px 0px 10px -4px rgba(26, 59, 108, 0.12),
+    0px 18px 28px 8px rgba(26, 59, 108, 0.1);
+$box-shadow-menu-sidebar: 0px 1px 2px 0px rgba(3, 52, 125, 0.25);
+// *** END BOX SHADOW ***
+
+// *** BORDER RADIUS ***
+$border-radius-lg: 8px;
+$border-radius-xl: 16px;
+$border-radius-2xl: 20px;
+$border-radius-full: 9999px;
+// *** END BORDER RADIUS ***
+
+// *** ICON SIZE ***
+$icon-size-xs: 12px;
+$icon-size-sm: 16px;
+$icon-size-md: 24px;
+$icon-size-lg: 32px;
+$icon-size-xl: 40px;
+// *** END ICON SIZE ***
+
+// *** AVATAR SIZE ***
+$avatar-sm: 24px;
+$avatar-md: 32px;
+$avatar-lg: 40px;
+$avatar-xl: 48px;
+$avatar-2xl: 64px;
+$avatar-3xl: 80px;
+// *** END AVATAR SIZE ***

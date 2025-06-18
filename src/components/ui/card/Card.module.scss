@@ -1,0 +1,36 @@
+.cd {
+    &__bgColor {
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    &__textPrice {
+        color: #ce1212;
+        font-weight: 600;
+    }
+
+    &__productImg {
+        position: relative;
+
+        img {
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        &--imgPri {
+            display: block;
+        }
+
+        &--imgSecond {
+            display: none;
+        }
+    }
+
+    &__bgColor:hover .cd__productImg--imgSecond {
+        display: block;
+    }
+
+    &__bgColor:hover .cd__productImg--imgPri {
+        display: none;
+    }
+}

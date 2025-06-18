@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'SVN-Gotham';
+  src: local('SVN-Gotham'), url('./assets/fonts/SVN-Gotham.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  font-family: 'SVN-Gotham', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1c1c1c;
+
+  /* Text enhancements */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-gutter: stable overlay;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
