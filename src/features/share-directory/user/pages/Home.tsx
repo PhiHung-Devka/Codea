@@ -3,11 +3,21 @@ import { Carousel, Col, Row } from "antd";
 import slider3 from "@repo/assets/images/slider_3.webp";
 import slider5 from "@repo/assets/images/slider_5.webp";
 import { CardBasic } from "@repo/component/ui";
+import { userApi } from "@repo/packages/services";
+import { useEffect } from "react";
 
 const bannerList = [
     { src: slider3, alt: "Codea" },
     { src: slider5, alt: "Codea" }
 ];
+
+const { data } = userApi.queries.readQuery();
+
+useEffect(() => {
+    if (data) {
+        console.log("User data:", data);
+    }
+}, [data]);
 
 const Home = () => {
     return (
