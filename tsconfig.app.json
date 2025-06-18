@@ -38,7 +38,10 @@
       "@repo/assets/*": [
         "assets/*"
       ]
-    }
+    },
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
     "src"

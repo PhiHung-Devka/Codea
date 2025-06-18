@@ -52,7 +52,7 @@ const Footer = () => {
                                 <Flex justify="space-evenly">
                                     {socialLinks.map(({ name, href, icon, isPng }, index) => (
                                         <LinkBasic title={name} key={index} to={href} target="_blank" rel="noopener noreferrer">
-                                            {isPng ? <Avatar src={icon} size="large" /> : React.createElement(icon)}
+                                            {isPng ? <Avatar src={icon as string} size="large" /> : React.createElement(icon)}
                                         </LinkBasic>
                                     ))}
                                 </Flex>
