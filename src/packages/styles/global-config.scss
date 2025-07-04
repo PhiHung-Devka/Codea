@@ -1,45 +1,6 @@
 @use "./variables" as *;
 @use "./mixin" as *;
 
-// *** HEADLINES ***
-h1 {
-    @include typography($color-heading-text, $font-size-xl, $font-weight-bold, $line-height-xl);
-
-    @include responsive-md {
-        @include typography($color-heading-text, $font-size-xxl, $font-weight-bold, $line-height-xxl);
-    }
-}
-
-h2 {
-    @include typography($color-heading-text, $font-size-lg, $font-weight-semibold, $line-height-lg);
-
-    @include responsive-md {
-        @include typography($color-heading-text, $font-size-xl, $font-weight-bold, $line-height-xl);
-    }
-}
-
-h3 {
-    @include typography($color-heading-text, $font-size-md, $font-weight-bold, $line-height-md);
-
-    @include responsive-md {
-        @include typography($color-heading-text, $font-size-lg, $font-weight-semibold, $line-height-lg);
-    }
-}
-
-h4 {
-    @include typography($color-heading-text, $font-size-sm, $font-weight-bold, $line-height-sm);
-
-    @include responsive-md {
-        @include typography($color-heading-text, $font-size-md, $font-weight-bold, $line-height-md);
-    }
-}
-
-h5 {
-    @include typography($color-heading-text, $font-size-sm, $font-weight-bold, $line-height-sm);
-}
-
-// *** END HEADLINES ***
-
 .is-required {
     &::after {
         content: "*";
@@ -53,34 +14,6 @@ h5 {
     padding: 0 .1rem;
     margin-right: auto;
     margin-left: auto
-}
-
-.codea-container {
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 $padding-container-xs;
-    width: 100%;
-    max-width: $codea-xs;
-
-    @include responsive-sm {
-        padding: 0 $padding-container-sm;
-        max-width: $codea-sm;
-    }
-
-    @include responsive-md {
-        padding: 0 $padding-container-md;
-        max-width: $codea-md;
-    }
-
-    @include responsive-lg {
-        padding: 0 $padding-container-lg;
-        max-width: $codea-lg;
-    }
-
-    @include responsive-xl {
-        padding: 0 $padding-container-xl;
-        max-width: 100%;
-    }
 }
 
 .container {
@@ -109,4 +42,8 @@ h5 {
     .container {
         width: 1170px
     }
+}
+
+.boxShadow {
+    box-shadow: $box-shadow-dropdown;
 }

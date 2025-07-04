@@ -1,10 +1,18 @@
 import { FaceIcon, Ins, TikTok, PhoneIcon, ShippingIcon, PaymentIcon, ExchangeIcon } from "@repo/assets/icons";
 import ShopeeIcon from "@repo/assets/images/shopee.webp";
+import type { SizeType } from "antd/es/config-provider/SizeContext";
 
 const QUERY_KEYS = {
     user: {
         findAll: "user-list"
+    },
+    addressVN: {
+        base: "dvhcvn"
     }
+};
+
+const DEFAUL_VALUES = {
+    controlSize: "large" as SizeType,
 };
 
 const DEFAULT_VALUE_FOOTER = {
@@ -70,7 +78,8 @@ const DEFAULT_VALUE_FOOTER = {
 
 const REPO_CONSTANT = {
     QUERY_KEYS,
-    DEFAULT_VALUE_FOOTER
+    DEFAULT_VALUE_FOOTER,
+    DEFAUL_VALUES
 };
 
 export default REPO_CONSTANT;

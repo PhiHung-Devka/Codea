@@ -3,9 +3,7 @@ type Address = {
     userId: number,
     addressDetail: string,
     phone: string,
-    city: string,
-    district: string,
-    ward: string,
+    address: string,
     distance: number
 }
 

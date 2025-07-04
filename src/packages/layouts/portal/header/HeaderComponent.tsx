@@ -3,7 +3,6 @@ import styles from "./Header.module.scss";
 import { Badge, Button, Flex, Popover, type MenuProps } from "antd";
 import { DropdownBasic, LinkBasic } from "@repo/component/ui";
 import { UserOutlined, LogoutOutlined, SearchOutlined, LoginOutlined, UserAddOutlined, KeyOutlined } from "@ant-design/icons";
-import logoBlack from "@repo/assets/images/logo-black.png";
 import Search, { type SearchProps } from "antd/es/input/Search";
 import { useAuthStore } from "@repo/packages/stores";
 import { CartIcon } from "@repo/assets/icons";
@@ -14,30 +13,30 @@ const cartItemCount: any[] = [];
 const authItemsWhenLoggedOut: MenuProps["items"] = [
     {
         key: "login",
-        label: <span>Đăng nhập</span>,
+        label: <LinkBasic to={"/account/login"}>Đăng nhập</LinkBasic>,
         icon: <LoginOutlined style={{ fontSize: 16 }} />,
     },
     {
         key: "register",
-        label: <span>Đăng ký</span>,
+        label: <LinkBasic to={"/account/register"}>Đăng ký</LinkBasic>,
         icon: <UserAddOutlined style={{ fontSize: 16 }} />,
     },
     {
         key: "forgot-pass",
-        label: <span>Quên mật khẩu?</span>,
+        label: <LinkBasic to={"/account/forgot-password"}>Quên mật khẩu</LinkBasic>,
         icon: <KeyOutlined style={{ fontSize: 16 }} />,
     },
 ];
 
 const authItemsWhenLoggedIn: MenuProps["items"] = [
     {
-        key: "info",
-        label: <span>Thông tin tài khoản</span>,
+        key: "profile",
+        label: <LinkBasic to={"/account/profile"}>Thông tin tài khoản</LinkBasic>,
         icon: <UserOutlined style={{ fontSize: 16 }} />,
     },
     {
         key: "change-pass",
-        label: <span>Đổi mật khẩu</span>,
+        label: <LinkBasic to={"/account/change-password"}>Đổi mật khẩu</LinkBasic>,
         icon: <KeyOutlined style={{ fontSize: 16 }} />,
     },
     {
@@ -116,13 +115,13 @@ const cartContent = (
 
 const HeaderComponent = () => {
     return (
-        <>
+        <header className={styles["hd__stickyHeader"]}>
             <Flex className={styles["hd__topHeader"]}>
                 <Flex align="center" gap={10} justify="flex-end" className="container">
                     <Search allowClear placeholder="Tìm kiếm sản phẩm..." onSearch={onSearch}
                         enterButton={<Button style={{ background: '#545457', color: 'white' }} icon={<SearchOutlined />} />} style={{ width: 250 }} />
                     <div className={clsx(styles["hd__topHeader--text"], styles["hd__topHeader--cursor"])}>
-                        <Popover destroyOnHidden={true} content={cartContent} classNames={{ root: styles["hd__topHeader--popover"] }} placement="bottomLeft">
+                        <Popover destroyOnHidden={true} content={cartContent} placement="bottomLeft">
                             <LinkBasic to="/portal/cart" title="Giỏ hàng">
                                 <Badge dot={cartItemCount.length > 0} size="small" style={{ marginLeft: 10 }}>
                                     <CartIcon style={{ width: 'auto', height: '24px' }} />
@@ -135,15 +134,11 @@ const HeaderComponent = () => {
             <header className="container">
                 <Flex gap={190} align="center" justify="space-evenly" className={styles["hd__midHeader"]}>
                     <Flex gap={140} justify="space-between">
-                        <div className={clsx(styles["hd__midHeader--text"], styles["hd__midHeader--cursor"])}>
-                            <span>Trang Chủ</span>
-                        </div>
-                        <div className={clsx(styles["hd__midHeader--text"], styles["hd__midHeader--cursor"])}>
-                            <span>Chính sách</span>
-                        </div>
+                        <LinkBasic classLocal={"midHeader__text"} to={"/portal/home"} color="black">Trang chủ</LinkBasic>
+                        <LinkBasic classLocal={"midHeader__text"} to={"/"} color="black">Chính sách</LinkBasic>
                     </Flex>
                     <LinkBasic to="/portal/home" title="Codea">
-                        <img src={logoBlack} alt="Logo" width={90} />
+                        <img src={"/logo-black.png"} alt="Logo" width={90} />
                     </LinkBasic>
                     <Flex gap={140}>
                         <DropdownBasic menu={{ items: categoryItems }} trigger={["hover"]}
@@ -157,7 +152,7 @@ const HeaderComponent = () => {
                     </Flex>
                 </Flex>
             </header>
-        </>
+        </header>
     )
 }
 

@@ -8,3 +8,4 @@ export { default as PaymentIcon } from "./payment.svg?react";
 export { default as ExchangeIcon } from "./exchange.svg?react";
 export { default as CartIcon } from "./cart.svg?react";
 export { default as ZaloIcon } from "./zalo.svg?react";
+export { default as NotFound } from "./not-found.svg?react";

@@ -1,0 +1,180 @@
+@mixin titleStyle ($fs, $fw, $color, $space) {
+    font-size: $fs;
+    font-weight: $fw;
+    color: $color;
+    letter-spacing: $space;
+}
+
+@mixin bg-style($padding) {
+    background-color: $color-gray-scale-10;
+    padding: $padding;
+    border-radius: $border-radius-lg;
+}
+
+.pdd {
+    &__imgCarousel {
+        cursor: pointer;
+        object-fit: cover;
+
+        &--selected {
+            border: 1px solid $color-black-100;
+        }
+
+        &--notSelect {
+            border: 1px solid transparent;
+        }
+    }
+
+    &__titleHead {
+        @include titleStyle(20px, 700, $color-black-100, 0);
+        border-bottom: 1px #000 solid;
+        padding-bottom: $padding-md;
+        margin-bottom: $margin-md;
+    }
+
+    &__priceBox {
+        margin: $margin-xs 0;
+
+        &--specialPrice {
+            @include titleStyle($font-size-md, $font-weight-medium, $color-red-400, 2px);
+        }
+
+        &--oldPrice {
+            @include titleStyle($font-size-2sm, $font-weight-regular, $color-gray-scale-60, 2px);
+            text-decoration: line-through;
+        }
+
+        &--savePrice {
+            @include titleStyle($font-size-3xs, $font-weight-semibold, $color-gray-scale-5, 2px);
+            background: $color-red-400;
+            padding: $padding-xs;
+        }
+    }
+
+    &__stockTitle,
+    &__vendorTitle {
+        @include titleStyle($font-size-xs, $font-weight-medium, $color-black-100, 0);
+
+        &--aStock,
+        &--aVendor {
+            @include titleStyle($font-size-xs, $font-weight-medium, #ff5722, 0);
+        }
+
+        &--aVendor {
+            text-transform: uppercase;
+        }
+    }
+
+    &__colorWrapper,
+    &__sizeWrapper {
+        margin: $margin-md 0;
+
+        &--colorTitle,
+        &--sizeTitle {
+            @include titleStyle($font-size-xs, $font-weight-medium, $color-black-100, 0);
+            margin-bottom: $margin-md;
+        }
+
+        &--colorCircle,
+        &--sizeItem {
+            width: 32px;
+            height: 32px;
+            border-radius: $border-radius-full;
+            cursor: pointer;
+        }
+
+        &--colorCircle {
+            overflow: hidden;
+            border: 1px solid $color-gray-scale-30;
+        }
+
+        &--sizeItem {
+            background-color: $color-black-100;
+            color: $color-gray-scale-5;
+            font-weight: $font-weight-semibold;
+            font-size: $font-size-2xs;
+        }
+    }
+
+    &__qtyWrapper {
+        margin: 15px 0;
+
+        &--qtyTitle {
+            @include titleStyle($font-size-xs, $font-weight-medium, $color-black-100, 0);
+        }
+
+        &--inputCts {
+            font-size: $font-size-xs;
+            height: 32px;
+            width: 50px;
+            text-align: center;
+            border: none;
+            margin: 0;
+        }
+    }
+
+    &__ratingWrapper {
+        margin-top: 30px;
+        border: 1px solid $color-gray-scale-20;
+        border-radius: $border-radius-lg;
+        padding: 0 $padding-lg;
+
+        &--title {
+            @include titleStyle($font-size-2sm, $font-weight-medium, $color-black-100, 1.5px);
+            text-transform: uppercase;
+        }
+    }
+
+    &__ratingAverage {
+        background-color: $color-gray-scale-10;
+        padding: $padding-4xl;
+        border-radius: $border-radius-lg;
+        text-align: center;
+
+        &--title {
+            font-size: $font-size-xl;
+            font-weight: $font-weight-bold;
+        }
+
+        &--assess {
+            @include titleStyle($font-size-xs, $font-weight-regular, $color-gray-scale-60, 0);
+        }
+    }
+
+    &__progress {
+        &--number svg {
+            color: #fadb14;
+            font-size: $font-size-xs;
+        }
+
+        p {
+            color: $color-gray-scale-60;
+        }
+    }
+
+    &__cmtWrapper {
+        &--chooseRate {
+            font-weight: $font-weight-semibold;
+
+            p {
+                font-size: $font-size-sm;
+            }
+        }
+
+        &--cmtContent {
+            @include bg-style(6px);
+
+            &:not(:first-child) {
+                margin-top: $margin-sm;
+            }
+        }
+
+        &--noCmt {
+            @include bg-style(0 $padding-md);
+
+            span {
+                font-size: $font-size-xs;
+            }
+        }
+    }
+}

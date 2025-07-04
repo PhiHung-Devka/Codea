@@ -24,4 +24,13 @@ export default defineConfig({
       '@repo/assets': path.resolve(__dirname, "src/assets")
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom'],
+        },
+      },
+    },
+  },
 })

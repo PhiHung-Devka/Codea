@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
-import Header from "./header/HeaderComponent";
-import Footer from "./footer/Footer";
 import { FloatButton, Layout } from "antd";
 import { CustomerServiceOutlined, FacebookFilled, PhoneOutlined } from "@ant-design/icons";
 import { ZaloIcon } from "@repo/assets/icons";
+import HeaderComponent from "../header/HeaderComponent";
+import FooterComponent from "../footer/FooterComponent";
 
 const UserLayout = () => {
     return (
         <Layout style={{ background: '#fff' }}>
-            <Header />
-            <Outlet />
-            <Footer />
+            <HeaderComponent />
+            <section>
+                <Outlet />
+            </section>
+            <FooterComponent />
             <FloatButton.Group shape="circle">
                 <FloatButton.BackTop visibilityHeight={400} style={{ marginBottom: 56 }} />
                 <FloatButton.Group trigger="click" icon={<CustomerServiceOutlined />}>

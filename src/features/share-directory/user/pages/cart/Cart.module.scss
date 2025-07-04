@@ -1,0 +1,20 @@
+.crt {
+    &__qtyWrapper {
+        margin: 15px 0;
+
+        &--qtyTitle {
+            font-size: $font-size-xs, $font-weight-medium, $color-black-100;
+            font-weight: $font-weight-medium;
+            color: $color-black-100;
+        }
+
+        &--inputCts {
+            font-size: $font-size-xs;
+            height: 32px;
+            width: 50px;
+            text-align: center;
+            border: none;
+            margin: 0;
+        }
+    }
+}

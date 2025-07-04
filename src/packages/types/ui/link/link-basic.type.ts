@@ -5,6 +5,8 @@ type LinkBasicProps = LinkProps & {
     fontSize?: FontSize,
     align?: TextAlign,
     fontWeight?: FontWeight,
+    isHover?: boolean,
+    classLocal?: string
 }
 
 export type { LinkBasicProps };

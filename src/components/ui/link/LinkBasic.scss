@@ -1,0 +1,15 @@
+.linkbs:hover {
+    color: $color-primary-400 !important;
+}
+
+.midHeader {
+    &__text {
+        font-weight: $font-weight-medium;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+
+        &:hover {
+            color: $color-gray-scale-40 !important;
+        }
+    }
+}
