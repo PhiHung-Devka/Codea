@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { FloatButton, Layout } from "antd";
 import { CustomerServiceOutlined, FacebookFilled, PhoneOutlined } from "@ant-design/icons";
-import { ZaloIcon } from "@repo/assets/icons";
 import HeaderComponent from "../header/HeaderComponent";
 import FooterComponent from "../footer/FooterComponent";
 
@@ -23,12 +22,13 @@ const UserLayout = () => {
                         }}
                         icon={<FacebookFilled style={{ color: '#0866ff' }} />}
                     />
-                    <FloatButton href="https://zalo.me/" target="_blank"
+                    <FloatButton href="https://m.me/61577080404179" target="_blank"
                         tooltip={{
-                            title: 'Zalo',
+                            title: 'Messenger',
                             placement: 'left',
                         }}
-                        icon={<ZaloIcon />}
+                        icon={<img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/messenger-icon_y8okh6.svg"
+                            alt="Messenger" />}
                     />
                     <FloatButton href="tel:0344966647"
                         tooltip={{

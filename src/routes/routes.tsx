@@ -10,6 +10,8 @@ const Register = lazy(() => import("@repo/features/auth/pages/register/Register"
 const ForgotPassword = lazy(() => import("@repo/features/auth/pages/forgot-password/ForgotPassword"));
 const ProductDetail = lazy(() => import("@repo/features/share-directory/user/pages/product-detail/ProductDetail"));
 const Cart = lazy(() => import("@repo/features/share-directory/user/pages/cart/Cart"));
+const Checkout = lazy(() => import("@repo/features/share-directory/user/pages/checkout/Checkout"));
+const Category = lazy(() => import("@repo/features/share-directory/user/pages/category/Category"));
 
 export default function AppRoutes() {
     return (
@@ -33,6 +35,8 @@ export default function AppRoutes() {
                     <Route path="home" element={<Home />} />
                     <Route path="product/:id" element={<ProductDetail />} />
                     <Route path="cart" element={<Cart />} />
+                    <Route path="checkout" element={<Checkout />} />
+                    <Route path="category" element={<Category />} />
                 </Route>
             </Routes>
         </BrowserRouter>

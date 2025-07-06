@@ -1,9 +1,10 @@
 import TableBasic from "@repo/component/ui/table/TableBasic";
-import { Button, Flex } from "antd";
+import { Button, Card, Col, Flex, Row } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import styles from "./Cart.module.scss";
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
     const [dataSource, setDataSource] = useState([
@@ -73,10 +74,19 @@ const Cart = () => {
 
     return (
         <div className="container">
-            <div className="header-cart">Giỏ hàng của bạn</div>
+            <div className={styles["crt__headerCart"]}>Giỏ hàng của bạn</div>
             <TableBasic isCart isColumnsCenter columns={columns} dataSource={dataSource} actionItems={1} actionRender={(_) => (
                 <Button type="primary" danger icon={<DeleteOutlined />}>Xóa</Button>
             )} />
+            <Row className={styles["crt__footerCart"]}>
+                <Col span={8} offset={16}>
+                    <Flex align="center" justify="space-between">
+                        <span className={styles["crt__footerCart--totalTitle"]}>Tổng:</span>
+                        <span className={styles["crt__footerCart--totalValue"]}>250,000đ</span>
+                    </Flex>
+                    <Link to={"/portal/checkout"}><Button block color="default" variant="solid">Thanh toán</Button></Link>
+                </Col>
+            </Row>
         </div>
     );
 };

@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import HeaderComponent from "../header/HeaderComponent";
 import FooterComponent from "../footer/FooterComponent";
 import { CustomerServiceOutlined, FacebookFilled, PhoneOutlined } from "@ant-design/icons";
-import { ZaloIcon } from "@repo/assets/icons";
 
 const AuthLayout = () => {
     return (
@@ -28,7 +27,7 @@ const AuthLayout = () => {
                             title: 'Zalo',
                             placement: 'left',
                         }}
-                        icon={<ZaloIcon />}
+                        icon="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/zalo_ujh1xs.svg"
                     />
                     <FloatButton href="tel:0344966647"
                         tooltip={{

@@ -85,7 +85,6 @@ const cartContent = (
                 </div>
             </div>
         </div>
-
         <div style={{ borderBottom: "1px solid #e8e8e8", paddingTop: 10, paddingBottom: 10 }}>
             <div style={{ display: "flex", gap: 10 }}>
                 <img src="URL_IMG_2" alt="Product 2" width={60} />
@@ -102,7 +101,6 @@ const cartContent = (
                 </div>
             </div>
         </div>
-
         <div style={{ marginTop: 10, textAlign: "right", fontWeight: "bold", color: "red" }}>
             Tổng tiền: 440.000đ
         </div>
@@ -138,7 +136,7 @@ const HeaderComponent = () => {
                         <LinkBasic classLocal={"midHeader__text"} to={"/"} color="black">Chính sách</LinkBasic>
                     </Flex>
                     <LinkBasic to="/portal/home" title="Codea">
-                        <img src={"/logo-black.png"} alt="Logo" width={90} />
+                        <img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751747464/logo-black_cdce4c.png" alt="Logo" width={90} />
                     </LinkBasic>
                     <Flex gap={140}>
                         <DropdownBasic menu={{ items: categoryItems }} trigger={["hover"]}

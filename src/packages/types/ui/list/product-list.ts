@@ -1,7 +1,7 @@
-import type { CardBasicProps } from "../card/card-basic.type"
+import type { HomeProduct } from "../../base-model";
 
 type ProductListProps = {
-    products: CardBasicProps[];
+    products: HomeProduct[];
 };
 
 export type { ProductListProps };

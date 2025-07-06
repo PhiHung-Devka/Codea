@@ -1,4 +1,4 @@
-import type { LabelDividerProps } from "@repo/packages/types/ui/label";
+import type { LabelDividerProps } from "@repo/packages/types";
 import { domClass } from "@repo/packages/ultis/common/dom-class";
 import { FontSize, FontWeight } from "@repo/packages/ultis/enum/ui.enum";
 import clsx from "clsx";

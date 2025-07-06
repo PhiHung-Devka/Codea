@@ -1,4 +1,4 @@
-import type { TableBasicProps } from "@repo/packages/types/ui/table/table-basic.type"
+import type { TableBasicProps } from "@repo/packages/types"
 import { ConfigProvider, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { NotFoundTable } from "../common/NotFoundTable";

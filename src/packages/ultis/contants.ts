@@ -1,5 +1,4 @@
-import { FaceIcon, Ins, TikTok, PhoneIcon, ShippingIcon, PaymentIcon, ExchangeIcon } from "@repo/assets/icons";
-import ShopeeIcon from "@repo/assets/images/shopee.webp";
+import { ShippingIcon, PaymentIcon, ExchangeIcon } from "@repo/assets/icons";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 
 const QUERY_KEYS = {
@@ -8,17 +7,28 @@ const QUERY_KEYS = {
     },
     addressVN: {
         base: "dvhcvn"
+    },
+    banner: {
+        findAll: "banner-list"
+    },
+    home: {
+        product: "product"
     }
 };
 
 const DEFAUL_VALUES = {
     controlSize: "large" as SizeType,
+    pagination: {
+        sizeOptions: [5, 10, 20],
+        pageIndex: 1,
+        pageSize: 25
+    },
 };
 
 const DEFAULT_VALUE_FOOTER = {
     supportBoxes: [
         {
-            icon: PhoneIcon,
+            iconUrl: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/phone_omdydr.svg",
             title: "Hỗ trợ 24/7",
             desc: "Gọi ngay để tư vấn!",
         },
@@ -42,26 +52,22 @@ const DEFAULT_VALUE_FOOTER = {
         {
             name: "Facebook",
             href: "https://www.facebook.com/people/Codea-Lab/61577080404179/",
-            icon: FaceIcon,
-            isPng: false
+            icon: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745576/facebook_su0jwq.svg",
         },
         {
             name: "Instagram",
             href: "https://www.instagram.com/codea_vn?igsh=cHVqdGI1c3B3bXdn",
-            icon: Ins,
-            isPng: false
+            icon: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/instagram_kohm86.svg",
         },
         {
             name: "TikTok",
             href: "https://www.tiktok.com/@codea.style2025?is_from_webapp=1&sender_device=pc",
-            icon: TikTok,
-            isPng: false
+            icon: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/tiktok_oyf25l.svg"
         },
         {
             name: "Shoppe",
             href: "https://shopee.vn/codea",
-            icon: ShopeeIcon,
-            isPng: true
+            icon: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751747483/shopee_qdvuyo.webp"
         }
     ],
     aboutLinks: [

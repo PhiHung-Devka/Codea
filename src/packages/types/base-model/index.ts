@@ -1,6 +1,6 @@
 export * from "./address.type";
 export * from "./authority.type";
-export * from "./brand.type";
+export * from "./banner.type";
 export * from "./cart.type";
 export * from "./category.type";
 export * from "./feedback.type";
@@ -13,3 +13,4 @@ export * from "./product.type";
 export * from "./role.type";
 export * from "./user.type";
 export * from "./voucher.type";
+export * from "./home.type";

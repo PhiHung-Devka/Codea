@@ -1,0 +1,23 @@
+:global(.ant-list-item-meta) {
+    align-items: center !important;
+}
+
+:global(.ant-list-item-meta-title) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 45px;
+    width: 200px;
+}
+
+.ckt {
+    &__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    &__productName {
+        font-weight: 500;
+        font-size: 14px;
+    }
+}

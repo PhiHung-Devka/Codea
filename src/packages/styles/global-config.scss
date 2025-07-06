@@ -1,6 +1,10 @@
 @use "./variables" as *;
 @use "./mixin" as *;
 
+.flex-center {
+    @include flex-center;
+}
+
 .is-required {
     &::after {
         content: "*";

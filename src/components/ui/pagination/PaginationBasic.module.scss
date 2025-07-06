@@ -1,0 +1,80 @@
+$item-size: 32px;
+
+@include globalStyles {
+    .pagination-custom {
+
+        .ant-pagination-item,
+        .ant-pagination-prev,
+        .ant-pagination-next {
+            border: 1px solid $color-base-stroke;
+
+            &.ant-pagination-item-active {
+                border-color: $color-main-primary;
+            }
+
+            &.ant-pagination-disabled {
+                background-color: $color-gray-scale-10;
+            }
+        }
+
+        .ant-pagination-prev,
+        .ant-pagination-next {
+            &:hover {
+                background-color: $color-gray-scale-10;
+            }
+        }
+    }
+}
+
+.pgb {
+    &__item {
+        &--page {
+            &.is-active {
+                color: #fff;
+            }
+        }
+
+        &--custom-icon {
+            width: $item-size;
+            height: $item-size;
+            border-radius: $border-radius-lg;
+            border: 1px solid $color-base-stroke;
+
+            &:hover {
+                background-color: $color-gray-scale-10;
+            }
+
+            &.is-disabled {
+                background-color: $color-gray-scale-10;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &__jump {
+        &--wrapper {
+            @include flex-center;
+            height: 100%;
+
+            &:hover {
+                .hide-when-hover {
+                    display: none;
+                }
+
+                .show-when-hover {
+                    display: block;
+                }
+            }
+        }
+
+        &--icon {
+            &.is-dot {
+                display: block;
+            }
+
+            &.is-action {
+                display: none;
+            }
+        }
+    }
+}

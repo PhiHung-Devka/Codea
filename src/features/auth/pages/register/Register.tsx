@@ -5,7 +5,6 @@ import type { GetProps } from 'antd';
 import { Button, Card, Col, Divider, Form, Input, Row } from 'antd';
 import { useEffect, useState } from 'react';
 
-// type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
 type OTPProps = GetProps<typeof Input.OTP>;
 
 const formItemLayout = {
@@ -14,14 +13,8 @@ const formItemLayout = {
 };
 
 const Register = () => {
-    // const { data: addressVNResponse, isLoading, isError } = useAddressStore();
     const [countdown, setCountdown] = useState<number>(0);
     const [form] = Form.useForm();
-
-    // const options = useMemo(() => {
-    //     return addressVNResponse?.data ? mapAddressToCascaderOptions(addressVNResponse.data) : []
-    // }, [addressVNResponse]);
-
     const onFinish = (values: any) => {
         console.log('Received values of form: ', values);
         alert('Đăng ký thành công!');
@@ -32,13 +25,6 @@ const Register = () => {
         onInput: (value) => console.log('onInput:', value),
     };
 
-    // const normalizeVietnamese = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
-    // const filter = (inputValue: string, path: DefaultOptionType[]) => path.some((option) => {
-    //     const label = String(option.label);
-    //     return normalizeVietnamese(label).includes(normalizeVietnamese(inputValue));
-    // });
-
     useEffect(() => {
         if (countdown === 0) return;
         const timer = setTimeout(() => setCountdown(prev => prev - 1), 1000);
@@ -48,9 +34,6 @@ const Register = () => {
     const handleSendOTP = () => {
         setCountdown(60);
     };
-
-    // if (isLoading) return <Spin tip="Đang tải dữ liệu địa chỉ..." />;
-    // if (isError) return <p style={{ color: 'red' }}>Không thể tải địa chỉ. Vui lòng thử lại.</p>;
 
     return (
         <Row justify={"center"} align={"middle"}>
@@ -96,21 +79,6 @@ const Register = () => {
                             })]}>
                             <Input.Password autoComplete='new-password' placeholder='Nhập xác nhận mật khẩu' />
                         </Form.Item>
-                        {/* <Form.Item label="Địa chỉ"
-                            rules={[{ type: 'array', required: true, message: 'Vui lòng chọn địa chỉ!' }]}>
-                            <Cascader options={options} placeholder="Chọn địa chỉ" showSearch={{ filter }}
-                                displayRender={(labels) => labels.reverse().join(" - ")}
-                                onChange={(_, selectedOptions) => {
-                                    const labels = selectedOptions?.map((option) => option.label).reverse().join(" - ");
-                                    form.setFieldValue("address", labels);
-                                }} />
-                        </Form.Item>
-                        <Form.Item name="address" hidden>
-                            <Input />
-                        </Form.Item> */}
-                        {/* <Form.Item name="phone" label="Số điện thoại" rules={[{ required: true, message: 'Không để trống số điện thoại!' }]}>
-                            <Input addonBefore={'+84'} autoComplete='tel' placeholder='Nhập số điện thoại' />
-                        </Form.Item> */}
                         <Form.Item label="OTP" extra="Chúng tôi sẽ gửi mã về email của bạn.">
                             <Row gutter={8}>
                                 <Col span={12}>

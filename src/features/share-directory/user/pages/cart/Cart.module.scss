@@ -1,7 +1,17 @@
-.crt {
-    &__qtyWrapper {
-        margin: 15px 0;
+@mixin textStyle($color) {
+    color: $color;
+    font-size: $font-size-2xs;
+    font-weight: $font-weight-medium;
+    margin-bottom: $margin-md;
+}
 
+.crt {
+    &__headerCart {
+        font-size: $font-size-md;
+        margin: $margin-xl 0;
+    }
+
+    &__qtyWrapper {
         &--qtyTitle {
             font-size: $font-size-xs, $font-weight-medium, $color-black-100;
             font-weight: $font-weight-medium;
@@ -15,6 +25,18 @@
             text-align: center;
             border: none;
             margin: 0;
+        }
+    }
+
+    &__footerCart {
+        margin-top: $margin-xl;
+
+        &--totalTitle {
+            @include textStyle($color-black-100);
+        }
+
+        &--totalValue {
+            @include textStyle($color-red-400);
         }
     }
 }

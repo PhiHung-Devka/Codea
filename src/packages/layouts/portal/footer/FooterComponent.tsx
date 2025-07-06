@@ -12,10 +12,14 @@ const FooterComponent = () => {
         <footer>
             <div style={{ backgroundColor: '#D1D1D1', marginTop: 20 }}>
                 <Flex align="center" justify="space-evenly">
-                    {supportBoxes.map(({ icon: IconComponent, title, desc }, index) => (
+                    {supportBoxes.map(({ icon, iconUrl, title, desc }, index) => (
                         <React.Fragment key={index}>
                             <Flex gap={20} align="center" className={styles["box"]}>
-                                <div className={styles["box__thumb"]}><IconComponent /></div>
+                                <div className={styles["box__thumb"]}>
+                                    {icon ? (React.createElement(icon)) : iconUrl ? (
+                                        <img src={iconUrl} alt={title} width={36} height={36} />
+                                    ) : null}
+                                </div>
                                 <Flex vertical>
                                     <span className={styles["box__title"]}>{title}</span>
                                     <span>{desc}</span>
@@ -24,7 +28,8 @@ const FooterComponent = () => {
                             {index < supportBoxes.length - 1 && (
                                 <Divider type="vertical" style={{ height: "5.8em", marginInline: 0, borderColor: "#fff" }} />
                             )}
-                        </React.Fragment>))}
+                        </React.Fragment>
+                    ))}
                 </Flex>
             </div>
             <div className={styles["ft"]}>
@@ -32,7 +37,7 @@ const FooterComponent = () => {
                     <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                         <Col className="gutter-row" span={7}>
                             <Flex gap={10} align="center">
-                                <img src={"/logo-white.png"} alt="Codea" width={100} />
+                                <img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751747464/logo-white_gqyegs.png" alt="Codea" width={100} />
                                 <span className={styles["ft__logoText"]}>Codea</span>
                             </Flex>
                             <span style={{ color: '#999999', fontSize: 16 }}>
@@ -49,9 +54,9 @@ const FooterComponent = () => {
                                 </form>
                                 <p style={{ color: '#999999', fontSize: '16px', textAlign: 'center' }}>Theo dõi Codea từ các nền tảng khác!</p>
                                 <Flex justify="space-evenly">
-                                    {socialLinks.map(({ name, href, icon, isPng }, index) => (
+                                    {socialLinks.map(({ name, href, icon }, index) => (
                                         <LinkBasic title={name} key={index} to={href} target="_blank" rel="noopener noreferrer">
-                                            {isPng ? <Avatar src={icon as string} size="large" /> : React.createElement(icon)}
+                                            <Avatar src={icon} size="large" />
                                         </LinkBasic>
                                     ))}
                                 </Flex>
