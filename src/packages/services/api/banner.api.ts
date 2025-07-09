@@ -37,7 +37,8 @@ const bannerApi = {
     queries: {
         readQuery: () => useQuery({
             queryKey: [REPO_CONSTANT.QUERY_KEYS.banner.findAll],
-            queryFn: () => read()
+            queryFn: () => read(),
+            staleTime: 1000 * 60 * 5
         }),
         paginationFilterQuery: (body: PagingFilterBody, enabled: boolean) =>
             useQuery({

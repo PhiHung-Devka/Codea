@@ -30,6 +30,9 @@ const BannerModal = ({ open, onClose, }: { open: boolean; onClose: () => void })
 
     const mutationCreate = useMutation({
         mutationFn: bannerApi.apis.create,
+        retry: (failureCount, error: any) => {
+            return error?.status === 429 && failureCount < 3;
+        },
         onSuccess: () => {
             notify?.success({ message: "Tạo banner thành công!" });
             queryClient.invalidateQueries({
@@ -88,9 +91,9 @@ const BannerModal = ({ open, onClose, }: { open: boolean; onClose: () => void })
             notify?.error({ message: "Vui lòng tải lên ít nhất 1 hình ảnh." });
             return;
         }
-        urls.forEach((url: string) => {
-            mutationCreate.mutate({ bannerUrl: url });
-        });
+        for (const url of urls) {
+            await mutationCreate.mutateAsync({ bannerUrl: url });
+        }
     };
 
     return (

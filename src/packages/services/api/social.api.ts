@@ -37,12 +37,14 @@ const socialApi = {
     queries: {
         readQuery: () => useQuery({
             queryKey: [REPO_CONSTANT.QUERY_KEYS.social.findAll],
-            queryFn: () => read()
+            queryFn: () => read(),
+            staleTime: 1000 * 60 * 5
         }),
         paginationFilterQuery: (body: PagingFilterBody, enabled: boolean) =>
             useQuery({
                 queryKey: [REPO_CONSTANT.QUERY_KEYS.social.base, JSON.stringify(body)],
                 queryFn: () => paginationFilter(body),
+                staleTime: 1000 * 60 * 5,
                 enabled
             })
     },

@@ -6,11 +6,11 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 const Home = () => {
     const bannerQuery = bannerApi.queries.readQuery();
-    const homeProduct = homeApi.queries.readQuery();
+    const { data: homeProduct, isLoading: homeLoading } = homeApi.queries.readQuery();
 
     return (
         <section>
-            <Spin spinning={bannerQuery.isLoading || !bannerQuery.data} indicator={<LoadingOutlined spin />} size="large" fullscreen />
+            <Spin spinning={homeLoading} indicator={<LoadingOutlined spin />} size="large" fullscreen />
             <div className="container-fluid">
                 <Carousel draggable autoplay={{ dotDuration: true }} autoplaySpeed={4000} pauseOnHover={false}>
                     {bannerQuery.data?.map((item) => (
@@ -20,7 +20,7 @@ const Home = () => {
             </div>
             <div className="container">
                 <div>
-                    <ProductList products={homeProduct.data ?? []} />
+                    <ProductList products={homeProduct ?? []} />
                 </div>
             </div>
         </section>

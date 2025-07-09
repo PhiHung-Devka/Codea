@@ -15,7 +15,8 @@ const homeApi = {
     queries: {
         readQuery: () => useQuery({
             queryKey: [REPO_CONSTANT.QUERY_KEYS.home.product],
-            queryFn: () => read()
+            queryFn: () => read(),
+            staleTime: 1000 * 60 * 5
         })
     },
     apis: {
