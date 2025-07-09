@@ -9,9 +9,10 @@ import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
 const UserLayout = () => {
     const socialData = socialApi.queries.readQuery();
 
-    const messengerItem = socialData.data?.find(item => item.name === "Messenger");
+    const socialList = Array.isArray(socialData.data) ? socialData.data : [];
 
-    const phoneItem = socialData.data?.find(item => item.isPhone);
+    const messengerItem = socialList.find(item => item.name === "Messenger");
+    const phoneItem = socialList.find(item => item.isPhone);
 
     return (
         <Layout style={{ background: '#fff' }}>
