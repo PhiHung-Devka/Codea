@@ -5,3 +5,4 @@ export { default as ExchangeIcon } from "./exchange.svg?react";
 export { default as CartIcon } from "./cart.svg?react";
 export { default as FirstIcon } from "./first.svg?react";
 export { default as LeftArrowIcon } from "./left-arrow.svg?react";
+export { default as PhoneIcon } from "./phone.svg";

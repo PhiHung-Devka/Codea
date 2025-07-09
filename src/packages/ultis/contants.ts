@@ -1,4 +1,4 @@
-import { ShippingIcon, PaymentIcon, ExchangeIcon } from "@repo/assets/icons";
+import { ShippingIcon, PaymentIcon, ExchangeIcon, PhoneIcon } from "@repo/assets/icons";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 
 const QUERY_KEYS = {
@@ -58,7 +58,7 @@ const DEFAUL_VALUES = {
 const DEFAULT_VALUE_FOOTER = {
     supportBoxes: [
         {
-            iconUrl: "https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/phone_omdydr.svg",
+            iconUrl: PhoneIcon,
             title: "Hỗ trợ 24/7",
             desc: "Gọi ngay để tư vấn!",
         },
