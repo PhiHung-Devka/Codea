@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { LinkBasic } from "@repo/component/ui";
 import { useNotify } from "@repo/component/ui/notification/Notification";
 import TableBasic from "@repo/component/ui/table/TableBasic";

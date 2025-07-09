@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { productApi } from "@repo/packages/services/api/product.api";
-import { Breadcrumb, Button, ColorPicker, Flex, InputNumber, Table, Tabs, type TableColumnsType } from "antd";
+import { Breadcrumb, Button, ColorPicker, Flex, Table, Tabs, type TableColumnsType } from "antd";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styles from "./ProductDetailMgt.module.scss";
@@ -15,7 +15,6 @@ import type { ProductDetailCreateBody, ProductDetailEditBody } from "@repo/packa
 import { Upload } from "antd";
 import type { UploadFile, UploadProps, RcFile } from "antd/es/upload";
 import { productDetaiSizelApi } from "@repo/packages/services/api/product-detail-size.api";
-import type { ProductDetail } from "@repo/packages/types";
 
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -350,7 +349,7 @@ const ProductDetailMgt = () => {
             title: 'Tác vụ',
             dataIndex: '',
             key: 'x',
-            render: (record: ProductDetail) => <Flex gap={8}>
+            render: () => <Flex gap={8}>
                 <Button type="primary" icon={<EditOutlined />} >
                     Sửa
                 </Button>

@@ -2,13 +2,11 @@
 import { Carousel, Spin } from "antd";
 import { ProductList } from "@repo/component/ui/list/ProductList";
 import { bannerApi, homeApi } from "@repo/packages/services";
-import React from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const Home = () => {
     const bannerQuery = bannerApi.queries.readQuery();
     const homeProduct = homeApi.queries.readQuery();
-    const [percent, setPercent] = React.useState(0);
 
     return (
         <section>
