@@ -6,11 +6,20 @@ import styles from "./ProductList.module.scss";
 import { RenderCondition } from "../common/RenderCondition";
 
 export const ProductList = ({ products, source }: ProductListProps) => {
-    const isSectioned = source === "home" || (Array.isArray(products) && products.length > 0 && 'products' in products[0]);
+    const isSectioned =
+        source === "home" ||
+        (
+            Array.isArray(products) &&
+            products.length > 0 &&
+            typeof products[0] === 'object' &&
+            'products' in products[0] &&
+            Array.isArray((products[0] as any).products)
+        );
+
     let sections;
 
     if (source === "category") {
-        const previews = (products as any[]).map((p) => {
+        const previews = (Array.isArray(products) ? products : []).map((p: any) => {
             const allSizes = (p.productDetails || []).flatMap((detail: any) => detail.sizes || []);
             const minSize = allSizes.reduce((min: any, s: any) =>
                 (min == null || (s.realPrice ?? Infinity) < (min.realPrice ?? Infinity)) ? s : min, null);
@@ -28,17 +37,26 @@ export const ProductList = ({ products, source }: ProductListProps) => {
         sections = [{ label: "", products: previews }];
     } else {
         sections = isSectioned
-            ? (products as any)
-            : [{ label: "", products: products }];
+            ? (Array.isArray(products) ? products : [])
+            : [{ label: "", products: Array.isArray(products) ? products : [] }];
     }
 
     return (
         <>
-            {sections.map((section: any) => (
-                <RenderCondition condition={section.products.length > 0} key={section.label}>
-                    {/* <div> */}
-                    {isSectioned && <div className={styles["pl__cardTitle"]}>{section.label}</div>}
-                    <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
+            {Array.isArray(sections) && sections.map((section: any, idx: number) => (
+                <RenderCondition
+                    key={section.label ?? idx}
+                    condition={Array.isArray(section.products) && section.products.length > 0}
+                >
+                    {isSectioned && (
+                        <div className={styles["pl__cardTitle"]}>{section.label}</div>
+                    )}
+                    <Row
+                        gutter={[
+                            { xs: 8, sm: 16, md: 24, lg: 32 },
+                            { xs: 8, sm: 16, md: 24, lg: 32 },
+                        ]}
+                    >
                         {section.products.map((p: any) => (
                             <Col key={p.productId} className="gutter-row" span={6}>
                                 <Link to={`/portal/product/${p.productId}`}>
@@ -47,9 +65,8 @@ export const ProductList = ({ products, source }: ProductListProps) => {
                             </Col>
                         ))}
                     </Row>
-                    {/* </div> */}
-                </RenderCondition >
+                </RenderCondition>
             ))}
         </>
-    )
-}
+    );
+};
