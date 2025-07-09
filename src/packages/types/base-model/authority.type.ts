@@ -1,7 +1,8 @@
+import type { Role } from "./role.type";
+
 type Authority = {
     authorityId: number,
-    roleId: number,
-    userId: number
+    role: Role,
 };
 
 export type { Authority };

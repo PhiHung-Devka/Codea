@@ -16,8 +16,8 @@ const TableHeaderLabel = ({ label }: TableHeaderLabelProps) => {
     return <span>{label}</span>
 };
 
-const TableBasic = ({ showOrderNumber = true, pageIndex, pageSize, pagination = false, columns, isCart, isColumnsCenter,
-    className = "", isUseActionDefault = true, actionItems, isStickyAction = true, actionRender, ...props }: TableBasicProps) => {
+const TableBasic = <T extends object>({ showOrderNumber = true, pageIndex, pageSize, pagination = false, columns, isCart, isColumnsCenter,
+    className = "", isUseActionDefault = true, actionItems, isStickyAction = true, actionRender, ...props }: TableBasicProps<T>) => {
     const _columns = (columns || []).map((x) => {
         const _title = typeof x.title === "string" ? (<TableHeaderLabel label={x.title} />) : (x.title);
         return { ...x, title: _title }
@@ -35,12 +35,12 @@ const TableBasic = ({ showOrderNumber = true, pageIndex, pageSize, pagination = 
         });
     }
 
-    const _columnsMerged: ColumnsType = (showOrderNumber && !isCart) ? [
+    const _columnsMerged: ColumnsType<T> = (showOrderNumber && !isCart) ? [
         {
             key: "orderNumber",
             title: <TableHeaderLabel label="STT" />,
             width: table.orderNumberWidth,
-            align: isColumnsCenter ? "center" : "start",
+            align: "center",
             render: (_, __, index) => (pageIndex! - 1) * pageSize! + index + 1
         }, ..._columns] : _columns;
 

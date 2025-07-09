@@ -4,7 +4,6 @@ type Address = {
     addressDetail: string,
     phone: string,
     address: string,
-    distance: number
 }
 
 export type { Address };

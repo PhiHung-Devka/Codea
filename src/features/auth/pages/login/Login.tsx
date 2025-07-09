@@ -2,17 +2,30 @@ import { Button, Card, Checkbox, Col, ConfigProvider, Divider, Flex, Form, Input
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { LinkBasic } from "@repo/component/ui";
 import { LabelDivider } from "@repo/component/ui/label/LabelDivider";
+import { useNavigate } from "react-router-dom";
+import { useNotify } from "@repo/component/ui/notification/Notification";
+import { useAuthStore } from "@repo/packages/stores";
+import { userApi } from "@repo/packages/services";
 
 const Login = () => {
-    const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
+    const { login } = useAuthStore();
+    const notify = useNotify();
+    const navigate = useNavigate();
+
+    const onFinish = async (values: any) => {
+        try {
+            const user = await userApi.apis.loginApi({ email: values.email, password: values.password });
+            login(user);
+            notify?.success({ message: "Đăng nhập thành công!" });
+            navigate("/admin/banner");
+        } catch (err: any) {
+            const message = typeof err === "string" ? err : err?.message || err?.error || "Vui lòng thử lại.";
+            notify?.error({ message: "Đăng nhập thất bại!", description: message });
+        }
     };
+
     return (
-        <ConfigProvider theme={{
-            token: {
-                colorPrimary: 'black'
-            }
-        }}>
+        <ConfigProvider theme={{ token: { colorPrimary: 'black' } }}>
             <Row justify={"center"} align={"middle"}>
                 <Col span={8}>
                     <Card title="Đăng nhập tài khoản" className="boxShadow" styles={{

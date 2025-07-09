@@ -3,4 +3,10 @@ type LoginBody = {
     password: string;
 };
 
-export type { LoginBody };
+type ChangePasswordRequest = {
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+};
+
+export type { LoginBody, ChangePasswordRequest };

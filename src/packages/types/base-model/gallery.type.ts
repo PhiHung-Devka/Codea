@@ -1,7 +1,6 @@
 type Gallery = {
-    galleryId: number,
-    productId: number,
-    thumbnail: string
+    galleryID?: number,
+    imageUrl: string
 }
 
 export type { Gallery };

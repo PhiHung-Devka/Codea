@@ -2,9 +2,15 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 import { Layout, Menu, type MenuProps } from "antd"
 import styles from "./Category.module.scss";
 import { Content } from "antd/es/layout/layout";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ProductList } from "@repo/component/ui/list/ProductList";
 import { PaginationBasicV2 } from "@repo/component/ui/pagination/PaginationBasic";
+import { usePaginationParams } from "@repo/packages/hooks/pagination/use-pagination-params.hook";
+import { productApi } from "@repo/packages/services/api/product.api";
+import { categoryApi } from "@repo/packages/services/api/category.api";
+import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
+import { useSearchParams } from "react-router-dom";
+import { NotFoundTable } from "@repo/component/ui/common/NotFoundTable";
 
 const { Sider } = Layout;
 
@@ -25,37 +31,64 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
     return { key, icon, children, label } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem('Tất cả sản phẩm', '1', <UnorderedListOutlined />),
-    getItem('Handmade', '2', <UnorderedListOutlined />),
-    getItem('T-Shirt', '3', <UnorderedListOutlined />),
-    getItem('Baby Tee', '4', <UnorderedListOutlined />),
-    getItem('Boxy', '5', <UnorderedListOutlined />)
-];
-
-const products = Array.from({ length: 8 }, (_, i) => ({
-    id: String(i + 1),
-    img1: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-1.jpg?v=1744601195103",
-    img2: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-2.jpg?v=1744601195760",
-    name: "Áo Polo Local Brand Unisex Teelab Pine Forests Polo AP069",
-    price: 350000,
-    realPrice: 195000,
-}));
-
 const Category = () => {
+    const [searchParams] = useSearchParams();
+    const categoryIdParam = searchParams.get("categoryId");
+    const [categoryId, setCategoryId] = useState<number | undefined>(
+        categoryIdParam ? Number(categoryIdParam) : undefined
+    );
+
+    const { pageIndex, pageSize, pagingObj, resetPagination } = usePaginationParams({
+        defaultPageIndex: 1, defaultPageSize: 10, readyUpdate: false,
+    });
+
+    const productQuery = productApi.queries.paginationFilterQuery({ ...pagingObj, categoryId }, true);
+    const categoryQuery = categoryApi.queries.readQuery();
+    const selectedKey = categoryId !== undefined ? String(categoryId) : "all";
+
+    const categoryItems: MenuItem[] = [
+        getItem('Tất cả sản phẩm', 'all', <UnorderedListOutlined />),
+        ...(categoryQuery.data?.map((cat: { categoryId: number, name: string }) =>
+            getItem(cat.name, String(cat.categoryId), <UnorderedListOutlined />)
+        ) || [])
+    ];
+
+    const handleMenuSelect: MenuProps['onSelect'] = ({ key }) => {
+        if (key === 'all') {
+            setCategoryId(undefined);
+        } else {
+            setCategoryId(Number(key));
+        }
+    };
+
+    useEffect(() => {
+        const categoryIdParam = searchParams.get("categoryId");
+        const parsed = categoryIdParam ? Number(categoryIdParam) : undefined;
+
+        setCategoryId(parsed);
+        resetPagination();
+    }, [searchParams]);
+
     return (
         <div className="container">
             <Layout hasSider style={{ margin: '10px 0' }}>
                 <Sider style={siderStyle}>
                     <div className={styles["ctgr__title"]}>Danh mục</div>
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+                    <Menu theme="dark" selectedKeys={[selectedKey]} mode="inline" items={categoryItems} onSelect={handleMenuSelect} />
                 </Sider>
                 <Layout style={{ background: '#fff' }}>
                     <Content style={{ overflow: 'initial' }}>
                         <div style={{ padding: '0 20px' }}>
-                            <ProductList products={products} />
+                            <RenderCondition condition={!!productQuery.data?.records.length}>
+                                <ProductList products={productQuery.data?.records || []} source="category" />
+                            </RenderCondition>
+                            <RenderCondition condition={!productQuery.data?.records.length}>
+                                <NotFoundTable />
+                            </RenderCondition>
                         </div>
-                        <PaginationBasicV2 total={products.length || 0} current={1} pageSize={5} />
+                        <RenderCondition condition={productQuery.data?.totalPages! > 1}>
+                            <PaginationBasicV2 total={productQuery.data?.totalPages || 0} current={pageIndex} pageSize={pageSize} />
+                        </RenderCondition>
                     </Content>
                 </Layout>
             </Layout>

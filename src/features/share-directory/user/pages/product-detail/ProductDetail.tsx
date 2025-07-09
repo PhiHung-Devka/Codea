@@ -5,26 +5,13 @@ import styles from "./ProductDetail.module.scss";
 import { useEffect, useState } from "react";
 import noCmt from "@repo/assets/images/imgStar.png";
 import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
+import { productApi } from "@repo/packages/services/api/product.api";
+import type { ProductDetail } from "@repo/packages/types";
+import { useAuthStore } from "@repo/packages/stores";
+import { useNotify } from "@repo/component/ui/notification/Notification";
+import { cartApi } from "@repo/packages/services/api/cart.api";
 
 const { TextArea } = Input;
-
-const detailProduct = [
-    {
-        color: { name: "Đen", hex: "#000000" },
-        image: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-1.jpg?v=1744601195103",
-        sizes: ["S", "M", "L"]
-    },
-    {
-        color: { name: "Đỏ", hex: "#ff0000" },
-        image: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-2.jpg?v=1744601195760",
-        sizes: ["M", "L", "XL"]
-    },
-    {
-        color: { name: "Trắng", hex: "#ffffff" },
-        image: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-1.jpg?v=1744601195103",
-        sizes: ["M", "L"]
-    }
-];
 
 const mockDataRate = () => [
     { star: 5, count: 80 },
@@ -67,13 +54,65 @@ const CommentModal = ({ open, onOk, onCancel }: ModalProps) => {
     )
 };
 
+interface MockProduct {
+    color: { name: string; hex: string };
+    image: string;
+    sizes: string[];
+}
+
 const ProductDetail = () => {
     const { id } = useParams();
-    const [selectedProduct, setSelectedProduct] = useState(detailProduct[0]);
+    const { user } = useAuthStore();
+    const notify = useNotify();
+    const productId = Number(id);
+    const [selectedProduct, setSelectedProduct] = useState<ProductDetail | MockProduct | null>(null);
     const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState<string>(detailProduct[0].sizes[0]);
+    const [selectedSize, setSelectedSize] = useState<string>("");
     const [filterStar, setFilterStar] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const detailQuery = productApi.queries.detailQuery(productId, true);
+    const productDetails: ProductDetail[] = detailQuery.data?.productDetails || [];
+
+    const handleAddToCart = async () => {
+        if (!user) {
+            notify?.warning({ message: "Vui lòng đăng nhập để thêm vào giỏ hàng" });
+            return;
+        }
+
+        const sizeObj = sizes.find((s: any) =>
+            typeof s === "object" && s.size === selectedSize
+        );
+
+        try {
+            await cartApi.apis.create({ userId: user.userId, productDetailSizeId: sizeObj.productDetailSizeId, quantity });
+            notify?.success({ message: "Đã thêm vào giỏ hàng" });
+        } catch (err) {
+            notify?.error({ message: "Thêm vào giỏ hàng thất bại" });
+        }
+    };
+
+    useEffect(() => {
+        if (productDetails.length > 0 && !selectedProduct) {
+            setSelectedProduct(productDetails[0]);
+            if ('sizes' in productDetails[0] && Array.isArray(productDetails[0].sizes)) {
+                setSelectedSize(typeof productDetails[0].sizes[0] === 'string' ? productDetails[0].sizes[0] : productDetails[0].sizes[0]?.size || "");
+            } else {
+                setSelectedSize("");
+            }
+        }
+    }, [productDetails]);
+
+    const handleSelectColor = (product: ProductDetail | MockProduct) => {
+        setSelectedProduct(product);
+        if ('sizes' in product && Array.isArray(product.sizes)) {
+            setSelectedSize(typeof product.sizes[0] === 'string' ? product.sizes[0] : product.sizes[0]?.size || "");
+        } else {
+            setSelectedSize("");
+        }
+    };
+
+    const handleSelectSize = (size: string) => setSelectedSize(size);
 
     const totalRating = mockDataRate().reduce((sum, item) => sum + item.count, 0);
     const ratingAverage = totalRating === 0 ? 0 : mockDataRate().reduce((sum, item) => sum + item.star * item.count, 0) / totalRating;
@@ -83,9 +122,32 @@ const ProductDetail = () => {
     const increaseQuantity = () => setQuantity(prev => prev + 1);
     const decreaseQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1)
 
-    useEffect(() => {
-        setSelectedSize(selectedProduct.sizes[0]);
-    }, [selectedProduct]);
+    let imageUrl = "";
+    let sizes: any[] = [];
+    let colorName = "";
+    let colorHex = "";
+    if (selectedProduct) {
+        if ('galleries' in selectedProduct) {
+            imageUrl = selectedProduct.galleries?.[0]?.imageUrl || "";
+            sizes = selectedProduct.sizes || [];
+            colorName = selectedProduct.color?.name;
+            colorHex = selectedProduct.color?.hexCode;
+        } else {
+            imageUrl = selectedProduct.image;
+            sizes = selectedProduct.sizes || [];
+            colorName = selectedProduct.color?.name;
+            colorHex = selectedProduct.color?.hex;
+        }
+    }
+    const sizeObj = sizes.find((s: any) => (typeof s === 'string' ? s === selectedSize : s.size === selectedSize));
+    const price = sizeObj && typeof sizeObj === 'object' ? (sizeObj.realPrice?.toLocaleString() + "đ") : "";
+    const oldPrice = sizeObj && typeof sizeObj === 'object' ? (sizeObj.price?.toLocaleString() + "đ") : "";
+    const discount = sizeObj && typeof sizeObj === 'object' ? (sizeObj.discountPercent ? `-${sizeObj.discountPercent}%` : "") : "";
+
+    let currentQuantity = 0;
+    if (typeof sizeObj === 'object' && sizeObj.quantity !== undefined) {
+        currentQuantity = Number(sizeObj.quantity);
+    }
 
     const showModal = () => setIsModalOpen(true);
 
@@ -102,31 +164,46 @@ const ProductDetail = () => {
             <section className="container">
                 <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 8, sm: 16, md: 24, lg: 32 }]} style={{ marginTop: 20 }}>
                     <Col span={13}>
-                        <Image src={selectedProduct.image} alt={selectedProduct.color.name} width="100%" style={{ objectFit: "contain" }} />
+                        <Image src={imageUrl} alt={colorName} width="100%" style={{ objectFit: "contain" }} />
                     </Col>
                     <Col span={11}>
-                        <div className={styles["pdd__titleHead"]}>Áo Polo Local Brand Unisex Teelab Pine Forests Polo AP069</div>
-                        <Flex align="center" gap={5} className={styles["pdd__vendorTitle"]}>Thương hiệu:
-                            <span className={styles["pdd__vendorTitle--aVendor"]}>Aula</span>
-                        </Flex>
+                        <div className={styles["pdd__titleHead"]}>{detailQuery.data?.name}</div>
                         <Flex align="center" gap={10} className={styles["pdd__priceBox"]}>
-                            <div className={styles["pdd__priceBox--specialPrice"]}>210.000đ</div>
-                            <span className={styles["pdd__priceBox--oldPrice"]}>350.000đ</span>
-                            <span className={styles["pdd__priceBox--savePrice"]}>-40%</span>
+                            <div className={styles["pdd__priceBox--specialPrice"]}>{price}</div>
+                            <span className={styles["pdd__priceBox--oldPrice"]}>{oldPrice}</span>
+                            {discount && discount !== "0" && (
+                                <span className={styles["pdd__priceBox--savePrice"]}>{discount}</span>
+                            )}
                         </Flex>
-                        <Flex align="center" gap={5} className={styles["pdd__stockTitle"]}>Tình trạng:
-                            <span className={styles["pdd__stockTitle--aStock"]}>Còn hàng</span>
+                        <Flex align="center" gap={5} className={styles["pdd__stockTitle"]}>
+                            Tình trạng:
+                            <span className={styles["pdd__stockTitle--aStock"]}>
+                                {currentQuantity > 0 ? "Còn hàng" : "Hết hàng"}
+                            </span>
                         </Flex>
                         <form action="multipart/form-data" method="post">
                             <div className={styles["pdd__colorWrapper"]}>
                                 <div className={styles["pdd__colorWrapper--colorTitle"]}>
-                                    Màu sắc: <span>{selectedProduct.color.name}</span>
+                                    Màu sắc: <span>{colorName}</span>
                                 </div>
                                 <Flex gap={8} align="center">
-                                    {detailProduct.map((product, index) => (
-                                        <div key={index} onClick={() => setSelectedProduct(product)}
-                                            style={{ backgroundColor: product.color.hex }} title={product.color.name}
-                                            className={styles["pdd__colorWrapper--colorCircle"]} ></div>))}
+                                    {productDetails.map((product: any, index: number) => {
+                                        let hex = '';
+                                        if ('color' in product) {
+                                            hex = product.color.hexCode || product.color.hex;
+                                        }
+                                        let selectedHex = colorHex;
+                                        return (
+                                            <div key={index} onClick={() => handleSelectColor(product)}
+                                                style={{
+                                                    backgroundColor: hex,
+                                                    border: selectedHex === hex ? '1px solid #1890ff' : '1px solid black'
+                                                }}
+                                                title={product.color.name}
+                                                className={styles["pdd__colorWrapper--colorCircle"]}
+                                            ></div>
+                                        );
+                                    })}
                                 </Flex>
                             </div>
                             <Flex gap={25} align="center" className={styles["pdd__qtyWrapper"]}>
@@ -142,11 +219,24 @@ const ProductDetail = () => {
                                     Kích thước: <span>{selectedSize}</span>
                                 </div>
                                 <Flex gap={8} align="center">
-                                    {selectedProduct.sizes.map((size, index) => (
-                                        <Flex justify="center" align="center" key={index} className={styles["pdd__sizeWrapper--sizeItem"]}
-                                            onClick={() => setSelectedSize(size)}>{size}</Flex>))}
+                                    {sizes.map((sizeObj: any, index: number) => {
+                                        const value = typeof sizeObj === 'string' ? sizeObj : sizeObj.size;
+                                        return (
+                                            <Flex
+                                                justify="center"
+                                                align="center"
+                                                key={index}
+                                                className={styles["pdd__sizeWrapper--sizeItem"]}
+                                                style={{ border: value === selectedSize ? '2px solid #1890ff' : 'none' }}
+                                                onClick={() => handleSelectSize(value)}
+                                            >{value}</Flex>
+                                        );
+                                    })}
                                 </Flex>
                             </div>
+                            <Button color="default" variant="solid" onClick={handleAddToCart} style={{ marginTop: 10 }}>
+                                Thêm vào giỏ hàng
+                            </Button>
                         </form>
                     </Col>
                 </Row>

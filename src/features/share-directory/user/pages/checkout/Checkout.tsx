@@ -1,21 +1,22 @@
 import { EnvironmentOutlined, LeftOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { useAddressStore, useProductStore } from "@repo/packages/stores";
+import { useAddressStore, useAuthStore } from "@repo/packages/stores";
 import { Avatar, Breadcrumb, Button, Card, Cascader, Col, Divider, Flex, Form, Input, List, Radio, Row, Skeleton, Tooltip, type CascaderProps, type GetProp } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useMemo, useEffect } from "react";
 import VirtualList from 'rc-virtual-list';
 import styles from "./Checkout.module.scss";
 import { mapAddressToCascaderOptions } from "@repo/packages/ultis/address/address.mapper";
-import { Link } from "react-router-dom";
+import useCartStore from "@repo/packages/stores/cart/use-cart-store";
+import { LinkBasic } from "@repo/component/ui";
+import { FormatCurrency } from "@repo/packages/ultis/common/currency-format";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { orderApi } from "@repo/packages/services/api/order.api";
+import REPO_CONSTANT from "@repo/packages/ultis/contants";
+import { useNotify } from "@repo/component/ui/notification/Notification";
+import type { OrderRequest } from "@repo/packages/types/domain/order.type";
+import { useNavigate } from "react-router-dom";
 
 type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
-
-const userAddress = {
-    name: 'Nguyễn Văn A',
-    phoneNumber: '0123456789',
-    addressLabel: 'Cà Ná - Thuận Nam - Ninh Thuận',
-    note: 'Giao giờ hành chính',
-};
 
 const style: React.CSSProperties = {
     display: 'flex',
@@ -24,9 +25,24 @@ const style: React.CSSProperties = {
 };
 
 const Checkout = () => {
+    const { cartItems } = useCartStore();
+    const { user } = useAuthStore();
+    const navigate = useNavigate();
+    const notify = useNotify();
     const { data: addressVNResponse, isLoading, isError } = useAddressStore();
-    const { data: products = [], isLoading: productsLoading, isError: productsError } = useProductStore();
     const [form] = Form.useForm();
+    const queryClient = useQueryClient();
+    const shippingFee = 30000;
+
+    const latestAddress = useMemo(() => {
+        if (!user?.addresses || user.addresses.length === 0) return null;
+        const latest = [...user.addresses].sort((a, b) => b.addressId - a.addressId)[0];
+        return latest;
+    }, [user]);
+
+    const subTotal = cartItems.reduce((sum, item) => sum + item.realPrice * item.quantity, 0);
+
+    const totalAmount = subTotal + shippingFee;
 
     const options = useMemo(() => {
         return addressVNResponse?.data ? mapAddressToCascaderOptions(addressVNResponse.data) : []
@@ -62,18 +78,15 @@ const Checkout = () => {
     };
 
     const initialAddressCodes = useMemo(() => {
-        return findAddressCodes(userAddress.addressLabel, options);
-    }, [options]);
+        return findAddressCodes(latestAddress?.address!, options);
+    }, [options, latestAddress]);
 
     useEffect(() => {
-        if (initialAddressCodes.length > 0) {
+        if (initialAddressCodes.length > 0 && latestAddress?.address) {
             form.setFieldValue('addressCascader', initialAddressCodes);
-            form.setFieldValue('address', userAddress.addressLabel);
+            form.setFieldValue('address', latestAddress.address);
         }
-    }, [initialAddressCodes, form]);
-
-    if (isLoading || productsLoading) return <span>Đang tải dữ liệu...</span>;
-    if (isError || productsError) return <p style={{ color: 'red' }}>Không thể tải dữ liệu. Vui lòng thử lại.</p>;
+    }, [initialAddressCodes, form, latestAddress]);
 
     const normalizeVietnamese = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -82,33 +95,81 @@ const Checkout = () => {
         return normalizeVietnamese(label).includes(normalizeVietnamese(inputValue));
     });
 
-    const handleCascaderChange = (_: (string | number | null)[], selectedOptions: DefaultOptionType[]) => {
+    const handleCascaderChange = (_: any, selectedOptions: DefaultOptionType[]) => {
         if (selectedOptions && selectedOptions.length > 0) {
             const labels = selectedOptions.map(option => option.label).reverse();
             const addressString = labels.join(' - ');
-            form.setFieldValue('address', addressString);
+            form.setFieldValue('address', addressString); // Bắt buộc!
         } else {
             form.setFieldValue('address', '');
         }
     };
 
+    const mutationCreate = useMutation({
+        mutationFn: orderApi.apis.create,
+        onSuccess: () => {
+            notify?.success({ message: "Đặt hàng thành công!" });
+            queryClient.invalidateQueries({
+                queryKey: [REPO_CONSTANT.QUERY_KEYS.order.base],
+            });
+            navigate("/portal/home")
+        },
+        onError: () => {
+            notify?.error({ message: "Đặt hàng thất bại!" });
+        },
+    });
+
+    const handleSubmitOrder = async () => {
+        try {
+            const values = await form.validateFields();
+
+            const addressDetail = values.addressDetail || '';
+            const address = values.address || '';
+
+            const payload: OrderRequest = {
+                totalPrice: totalAmount,
+                address: addressDetail && address ? `${addressDetail} - ${address}` : addressDetail || address || '',
+                phone: values.phoneNumber,
+                status: 0,
+                userId: user?.userId!,
+                orderDetails: cartItems.map((item) => ({
+                    productDetailSizeId: item.productDetailSizeId,
+                    quantity: item.quantity
+                }))
+            };
+            await mutationCreate.mutateAsync(payload);
+        } catch (err: any) {
+            console.error("Lỗi khi đặt hàng:", err);
+        }
+    };
+
+    if (isLoading) return <span>Đang tải dữ liệu...</span>;
+    if (isError) return <p style={{ color: 'red' }}>Không thể tải dữ liệu. Vui lòng thử lại.</p>;
+
     return (
         <div className="container">
             <Breadcrumb items={[{
-                href: '/portal/cart', title: (<div style={{ color: 'black' }}><LeftOutlined />
-                    <span style={{ marginInlineStart: 5 }}>Quay về giỏ hàng</span></div>)
+                title: (<LinkBasic color="black" to={"/portal/cart"} ><LeftOutlined />
+                    <span style={{ marginInlineStart: 5 }}>Quay về giỏ hàng</span></LinkBasic>)
             }]} style={{ marginBottom: 10 }} />
             <Row gutter={[16, 16]}>
                 <Col span={16}>
                     <Card className="boxShadow">
                         <div className={styles["ckt__title"]}>Người đặt hàng</div>
-                        <Form name="checkout" initialValues={{
-                            name: userAddress.name,
-                            phoneNumber: userAddress.phoneNumber,
-                            addressCascader: initialAddressCodes.length > 0 ? initialAddressCodes : [],
-                            address: userAddress.addressLabel,
-                            note: userAddress.note,
-                        }}>
+                        <Form
+                            key={user?.userId || 'no-user'}
+                            name="checkout"
+                            form={form}
+                            initialValues={{
+                                name: user?.fullname || '',
+                                phoneNumber: latestAddress?.phone || '',
+                                addressCascader: initialAddressCodes.length > 0 ? initialAddressCodes : [],
+                                address: latestAddress?.address || '',
+                                addressDetail: latestAddress?.addressDetail || '',
+                                note: "",
+                            }}
+                            onFinish={handleSubmitOrder}
+                        >
                             <Form.Item name="name" rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}>
                                 <Input prefix={<UserOutlined />} placeholder="Họ và tên" autoComplete="user" />
                             </Form.Item>
@@ -132,28 +193,31 @@ const Checkout = () => {
                             <Form.Item name="note">
                                 <TextArea rows={4} placeholder="Ghi chú nếu có" />
                             </Form.Item>
+                            <Button color="default" variant="solid" block style={{ marginTop: 10 }} htmlType="submit">
+                                Đặt hàng ngay
+                            </Button>
                         </Form>
                     </Card>
                     <Card className="boxShadow" style={{ marginTop: 10 }}>
                         <div className={styles["ckt__title"]}>Phương thức thanh toán</div>
-                        <Radio.Group style={style} options={[{ value: 1, label: "Thanh toán khi giao hàng (COD)" }]} />
+                        <Radio.Group defaultValue={1} style={style} options={[{ value: 1, label: "Thanh toán khi giao hàng (COD)" }]} />
                     </Card>
                 </Col>
                 <Col span={8}>
                     <Card className="boxShadow">
                         <div className={styles["ckt__title"]}>Sản phẩm trong đơn</div>
                         <List>
-                            <VirtualList data={products} height={200} itemHeight={47} itemKey="id">
+                            <VirtualList data={cartItems} height={200} itemHeight={47} itemKey="id">
                                 {(item) => (<List.Item>
-                                    <Skeleton avatar title={false} loading={productsLoading} active>
-                                        <List.Item.Meta avatar={<Avatar src={item.img1} />}
-                                            title={<Tooltip title={item.name}>
-                                                <Link to={`/portal/product/${item.id}`} className={styles["ckt__productName"]}>
-                                                    {item.name}
-                                                </Link>
+                                    <Skeleton avatar title={false} loading={isLoading} active>
+                                        <List.Item.Meta avatar={<Avatar src={item.imageUrl} />}
+                                            title={<Tooltip title={item.productName}>
+                                                <span className={styles["ckt__productName"]}>
+                                                    {item.productName}
+                                                </span>
                                             </Tooltip>}
-                                            description={item.productDetail} />
-                                        <div>{item.realPrice.toLocaleString()}đ</div>
+                                            description={`${item.colorName} / ${item.size}`} />
+                                        <div>{FormatCurrency(item.realPrice)}</div>
                                     </Skeleton>
                                 </List.Item>)}
                             </VirtualList>
@@ -170,18 +234,21 @@ const Checkout = () => {
                         <Flex vertical gap={10}>
                             <Flex justify="space-between">
                                 <span>Tạm tính:</span>
-                                <span>225.000đ</span>
+                                <span>{FormatCurrency(subTotal)}</span>
                             </Flex>
                             <Flex justify="space-between">
                                 <span>Phí vận chuyển:</span>
-                                <span>30.000đ</span>
+                                <span>{FormatCurrency(shippingFee)}</span>
                             </Flex>
                         </Flex>
                         <Divider style={{ margin: '15px 0', borderColor: 'rgba(175,175,175,.34)' }} />
                         <Flex justify="space-between">
                             <span>Tổng cộng</span>
-                            <span>255.000đ</span>
+                            <span>{FormatCurrency(totalAmount)}</span>
                         </Flex>
+                        <Button color="default" variant="solid" block style={{ marginTop: 10 }}
+                            onClick={handleSubmitOrder}>
+                            Đặt hàng ngay</Button>
                     </Card>
                 </Col>
             </Row>

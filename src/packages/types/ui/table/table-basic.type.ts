@@ -1,7 +1,7 @@
 import type { TableProps } from "antd";
 import type React from "react";
 
-type TableBasicProps = Omit<TableProps, "expandable"> & {
+type TableBasicProps<T> = Omit<TableProps<T>, "expandable"> & {
     showOrderNumber?: boolean;
     pageIndex?: number;
     pageSize?: number;

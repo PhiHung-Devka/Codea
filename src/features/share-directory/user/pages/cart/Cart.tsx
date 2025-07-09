@@ -1,30 +1,47 @@
 import TableBasic from "@repo/component/ui/table/TableBasic";
-import { Button, Card, Col, Flex, Row } from "antd";
+import { Button, Col, Flex, Row } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import styles from "./Cart.module.scss";
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "@repo/packages/stores";
+import { FormatCurrency } from "@repo/packages/ultis/common/currency-format";
+import useCartStore from "@repo/packages/stores/cart/use-cart-store";
 
 const Cart = () => {
-    const [dataSource, setDataSource] = useState([
-        {
-            key: "1",
-            image: "https://bizweb.dktcdn.net/thumb/large/100/415/697/products/img-0167-1.jpg?v=1744601195103",
-            name: "Áo Thun Local Brand Unisex Teelab Keyboard Tshirt TS330",
-            color: "Trắng",
-            size: "M",
-            price: 250000,
-            quantity: 1,
-            total: 250000,
-        },
-    ]);
+    const { user } = useAuthStore();
+    const { cartItems, editCartItem, deleteCartItem } = useCartStore();
+
+    const totalAmount = (cartItems ?? []).reduce((sum, item) => {
+        return sum + item.realPrice * item.quantity;
+    }, 0);
+
+    const dataSource = (cartItems ?? []).map((item) => ({
+        key: item.cartId.toString(),
+        image: item.imageUrl,
+        name: item.productName,
+        color: item.colorName,
+        size: item.size,
+        price: item.realPrice,
+        quantity: item.quantity,
+        total: totalAmount,
+    }));
 
     const handleQuantityChange = (key: string, delta: number) => {
-        setDataSource(prev => prev.map(item => item.key === key ? {
-            ...item, quantity: Math.max(1, item.quantity + delta),
-            total: item.price * Math.max(1, item.quantity + delta),
-        } : item));
+        const currentItem = cartItems?.find(item => item.cartId.toString() === key);
+        if (!currentItem) return;
+        const newQty = Math.max(1, currentItem.quantity + delta);
+
+        editCartItem({
+            cartId: currentItem.cartId,
+            userId: user?.userId!,
+            productDetailSizeId: currentItem.productDetailSizeId,
+            quantity: newQty,
+        });
+    };
+
+    const handleDelete = (id: number) => {
+        deleteCartItem(id);
     };
 
     const columns: ColumnsType = [
@@ -47,7 +64,7 @@ const Cart = () => {
             title: "Đơn giá",
             dataIndex: "price",
             align: 'center',
-            render: (price: number) => <span style={{ color: "red", fontWeight: 600 }}>{price.toLocaleString()}đ</span>,
+            render: (price: number) => <span style={{ color: "red", fontWeight: 600 }}>{FormatCurrency(price)}</span>,
         },
         {
             key: "quantity",
@@ -68,21 +85,21 @@ const Cart = () => {
             title: "Thành tiền",
             dataIndex: "total",
             align: 'center',
-            render: (total: number) => <span style={{ color: "red", fontWeight: 600 }}>{total.toLocaleString()}đ</span>,
+            render: (total: number) => <span style={{ color: "red", fontWeight: 600 }}>{FormatCurrency(total)}</span>,
         },
     ];
 
     return (
         <div className="container">
             <div className={styles["crt__headerCart"]}>Giỏ hàng của bạn</div>
-            <TableBasic isCart isColumnsCenter columns={columns} dataSource={dataSource} actionItems={1} actionRender={(_) => (
-                <Button type="primary" danger icon={<DeleteOutlined />}>Xóa</Button>
+            <TableBasic isCart isColumnsCenter columns={columns} dataSource={dataSource} actionItems={1} actionRender={(record) => (
+                <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDelete(Number(record.key))}>Xóa</Button>
             )} />
             <Row className={styles["crt__footerCart"]}>
                 <Col span={8} offset={16}>
                     <Flex align="center" justify="space-between">
                         <span className={styles["crt__footerCart--totalTitle"]}>Tổng:</span>
-                        <span className={styles["crt__footerCart--totalValue"]}>250,000đ</span>
+                        <span className={styles["crt__footerCart--totalValue"]}>{FormatCurrency(totalAmount)}</span>
                     </Flex>
                     <Link to={"/portal/checkout"}><Button block color="default" variant="solid">Thanh toán</Button></Link>
                 </Col>

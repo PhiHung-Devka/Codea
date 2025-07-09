@@ -1,0 +1,13 @@
+.pdt {
+    &__colorWrapper {
+        margin: $margin-md 0;
+
+        &--colorCircle {
+            width: 32px;
+            height: 32px;
+            border-radius: $border-radius-full;
+            overflow: hidden;
+            border: 1px solid $color-gray-scale-30;
+        }
+    }
+}

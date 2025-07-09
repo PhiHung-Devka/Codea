@@ -5,4 +5,16 @@ type Cart = {
     quantity: number
 }
 
-export type { Cart };
+type CartMap = {
+    cartId: number,
+    quantity: number,
+    productDetailSizeId: number,
+    size: string,
+    price: number,
+    realPrice: number,
+    colorName: string,
+    productName: string,
+    imageUrl: string
+}
+
+export type { Cart, CartMap };

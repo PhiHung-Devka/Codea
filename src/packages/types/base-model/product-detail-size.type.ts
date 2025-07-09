@@ -1,9 +1,10 @@
 type ProductDetailSize = {
-    productDetailSizeID: number,
-    productDetailId: number,
+    productDetailSizeId?: number,
     size: string,
     quantity: number,
-    price: number
+    price: number,
+    discountPercent: number,
+    realPrice: number
 }
 
 export type { ProductDetailSize };

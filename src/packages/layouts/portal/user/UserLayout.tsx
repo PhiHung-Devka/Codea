@@ -1,10 +1,18 @@
 import { Outlet } from "react-router-dom";
 import { FloatButton, Layout } from "antd";
-import { CustomerServiceOutlined, FacebookFilled, PhoneOutlined } from "@ant-design/icons";
+import { CustomerServiceOutlined, FacebookFilled } from "@ant-design/icons";
 import HeaderComponent from "../header/HeaderComponent";
 import FooterComponent from "../footer/FooterComponent";
+import { socialApi } from "@repo/packages/services/api/social.api";
+import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
 
 const UserLayout = () => {
+    const socialData = socialApi.queries.readQuery();
+
+    const messengerItem = socialData.data?.find(item => item.name === "Messenger");
+
+    const phoneItem = socialData.data?.find(item => item.isPhone);
+
     return (
         <Layout style={{ background: '#fff' }}>
             <HeaderComponent />
@@ -22,21 +30,18 @@ const UserLayout = () => {
                         }}
                         icon={<FacebookFilled style={{ color: '#0866ff' }} />}
                     />
-                    <FloatButton href="https://m.me/61577080404179" target="_blank"
-                        tooltip={{
-                            title: 'Messenger',
-                            placement: 'left',
-                        }}
-                        icon={<img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751745574/messenger-icon_y8okh6.svg"
-                            alt="Messenger" />}
-                    />
-                    <FloatButton href="tel:0344966647"
-                        tooltip={{
-                            title: 'Điện thoại',
-                            placement: 'left',
-                        }}
-                        icon={<PhoneOutlined />}
-                    />
+                    <RenderCondition condition={!!messengerItem}>
+                        <FloatButton href={messengerItem?.link} target="_blank"
+                            tooltip={{ title: messengerItem?.name, placement: 'left' }}
+                            icon={<img src={messengerItem?.iconUrl} alt="Messenger" />}
+                        />
+                    </RenderCondition>
+                    <RenderCondition condition={!!phoneItem}>
+                        <FloatButton href={`tel:${phoneItem?.link}`}
+                            tooltip={{ title: phoneItem?.name, placement: 'left' }}
+                            icon={<img src={phoneItem?.iconUrl} alt="SĐT" />}
+                        />
+                    </RenderCondition>
                 </FloatButton.Group>
             </FloatButton.Group>
         </Layout>
