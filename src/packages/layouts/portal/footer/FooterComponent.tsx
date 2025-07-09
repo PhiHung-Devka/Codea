@@ -11,6 +11,8 @@ const { supportBoxes, aboutLinks, policyLinks } = REPO_CONSTANT.DEFAULT_VALUE_FO
 const FooterComponent = () => {
     const socialData = socialApi.queries.readQuery();
 
+    const socialList = Array.isArray(socialData.data) ? socialData.data : [];
+
     return (
         <footer>
             <div style={{ backgroundColor: '#D1D1D1', marginTop: 20 }}>
@@ -57,11 +59,12 @@ const FooterComponent = () => {
                                 </form>
                                 <p style={{ color: '#999999', fontSize: '16px', textAlign: 'center' }}>Theo dõi Codea từ các nền tảng khác!</p>
                                 <Flex justify="space-evenly">
-                                    {socialData.data?.filter(item => !item.isPhone && item.name !== "Messenger").map((item, index) => (
-                                        <LinkBasic title={item.name} key={index} to={item.link} target="_blank" rel="noopener noreferrer">
-                                            <Avatar src={item.iconUrl} size="large" />
-                                        </LinkBasic>
-                                    ))}
+                                    {socialList.filter(item => !item.isPhone && item.name !== "Messenger")
+                                        .map((item, index) => (
+                                            <LinkBasic title={item.name} key={index} to={item.link} target="_blank" rel="noopener noreferrer">
+                                                <Avatar src={item.iconUrl} size="large" />
+                                            </LinkBasic>
+                                        ))}
                                 </Flex>
                             </div>
                         </Col>
