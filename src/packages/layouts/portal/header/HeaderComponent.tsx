@@ -95,17 +95,19 @@ const HeaderComponent = () => {
         }
     };
 
+    const categoryData = Array.isArray(categoryQuery.data) ? categoryQuery.data : [];
+
     const categoryItems: MenuItem[] = [
         getItem(
             <span onClick={() => handleCategoryClick('all')}>Tất cả sản phẩm</span>,
             'all'
         ),
-        ...(categoryQuery.data?.map((cat: { categoryId: number, name: string }) =>
+        ...categoryData.map((cat) =>
             getItem(
                 <span onClick={() => handleCategoryClick(String(cat.categoryId))}>{cat.name}</span>,
                 String(cat.categoryId)
             )
-        ) || [])
+        )
     ];
 
     const authMenuItems: MenuProps["items"] = user ? [
