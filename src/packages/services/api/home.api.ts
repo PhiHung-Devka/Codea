@@ -22,10 +22,15 @@ const homeApi = {
             queryKey: [REPO_CONSTANT.QUERY_KEYS.home.product],
             queryFn: () => read(),
             staleTime: 1000 * 60 * 5
+        }),
+        saleQuery: () => useQuery({
+            queryKey: [REPO_CONSTANT.QUERY_KEYS.home.sale],
+            queryFn: () => readSale(),
+            staleTime: 1000 * 60 * 5
         })
     },
     apis: {
-        read
+        read, readSale
     }
 };
 

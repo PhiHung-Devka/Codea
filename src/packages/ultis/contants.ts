@@ -14,7 +14,8 @@ const QUERY_KEYS = {
         base: "banner"
     },
     home: {
-        product: "product"
+        product: "product",
+        sale: "sale"
     },
     social: {
         findAll: "social-list",
