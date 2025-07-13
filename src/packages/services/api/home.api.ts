@@ -11,6 +11,11 @@ const read = async () => {
     return resp;
 };
 
+const readSale = async () => {
+    const resp = await axiosInternalMethod._get<HomeProduct[]>(mergePath("/sale"));
+    return resp;
+};
+
 const homeApi = {
     queries: {
         readQuery: () => useQuery({

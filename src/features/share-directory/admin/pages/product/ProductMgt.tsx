@@ -11,7 +11,9 @@ import REPO_CONSTANT from "@repo/packages/ultis/contants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Checkbox, Flex, Form, Input, Modal, Select } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 type Props = {
     open: boolean;
@@ -25,6 +27,61 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
     const [form] = Form.useForm();
     const notify = useNotify();
     const queryClient = useQueryClient();
+    const [description, setDescription] = useState("");
+
+    const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+    const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+    const uploadImageToCloudinary = useCallback(async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+            method: "POST",
+            body: formData,
+        });
+        const data = await res.json();
+        return data.secure_url;
+    }, []);
+
+    const quillModules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: {
+                image: function (this: any) {
+                    const quill = this.quill;
+                    const input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+                    input.click();
+                    input.onchange = async () => {
+                        if (input.files && input.files[0]) {
+                            const url = await uploadImageToCloudinary(input.files[0]);
+                            const range = quill.getSelection();
+                            quill.insertEmbed(range.index, 'image', url);
+                        }
+                    };
+                }
+            }
+        }
+    }), [uploadImageToCloudinary]);
+
+    // Sử dụng ReactQuill với modules mới
+    const quillEditor = useMemo(() => (
+        <ReactQuill
+            key={initialValues?.productId || 'new'}
+            theme="snow"
+            value={description}
+            onChange={setDescription}
+            modules={quillModules}
+        />
+    ), [description, initialValues?.productId, quillModules]);
 
     const mutationCreate = useMutation({
         mutationFn: productApi.apis.create,
@@ -56,6 +113,21 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
         }
     })
 
+    useEffect(() => {
+        if (open) {
+            if (initialValues) {
+                form.setFieldsValue({
+                    name: initialValues.name, categoryId: initialValues.category?.categoryId,
+                    isActive: initialValues.status === 1,
+                });
+                setDescription(initialValues.description || "");
+            } else {
+                form.resetFields();
+                setDescription("");
+            }
+        }
+    }, [initialValues, open]);
+
     const handleClose = () => {
         form.resetFields();
         onClose();
@@ -70,8 +142,8 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
                 categoryId: values.categoryId,
                 status: values.isActive ? 1 : 0,
                 date: new Date(),
+                description
             };
-
 
             if (initialValues?.productId) {
                 const editPayload: ProductEditBody = {
@@ -87,20 +159,8 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
         }
     };
 
-    useEffect(() => {
-        if (open) {
-            if (initialValues) {
-                form.setFieldsValue({
-                    name: initialValues.name, categoryId: initialValues.category?.categoryId, isActive: initialValues.status
-                });
-            } else {
-                form.resetFields();
-            }
-        }
-    }, [initialValues, open]);
-
     return (
-        <Modal title="Thêm sản phẩm" open={open} onCancel={handleClose} onOk={handleOk} okText="Lưu" cancelText="Hủy">
+        <Modal destroyOnClose title="Thêm sản phẩm" open={open} onCancel={handleClose} onOk={handleOk} okText="Lưu" cancelText="Hủy">
             <Form layout="vertical" form={form}>
                 <Form.Item name="name" rules={[{ required: true }]}>
                     <Input placeholder="Nhập tên sản phẩm" />
@@ -108,7 +168,10 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
                 <Form.Item name="categoryId" rules={[{ required: true }]}>
                     <Select options={categoryOtps} placeholder="Chọn danh mục" />
                 </Form.Item>
-                <Form.Item name="isActive" valuePropName="checked">
+                <Form.Item label="Mô tả sản phẩm">
+                    {quillEditor}
+                </Form.Item>
+                <Form.Item name="isActive" valuePropName="checked" >
                     <Checkbox>Đang hoạt động</Checkbox>
                 </Form.Item>
             </Form>
@@ -119,7 +182,7 @@ const ProductModal = ({ open, onClose, initialValues, categoryOtps }: Props) => 
 const Product = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { pageIndex, pageSize, pagingObj } = usePaginationParams({
-        defaultPageIndex: 1, defaultPageSize: 10, readyUpdate: false,
+        defaultPageIndex: 1, defaultPageSize: 20, readyUpdate: false,
     });
     const productQuery = productApi.queries.paginationFilterQuery({ ...pagingObj }, true);
     const [editingData, setEditingData] = useState<Partial<Product> | null>(null);
@@ -146,6 +209,13 @@ const Product = () => {
             dataIndex: "info",
             render: (_, record) => (record.category?.name),
         },
+        {
+            key: "status",
+            title: "Đang hoạt động",
+            dataIndex: "status",
+            render: (status) => (<Checkbox checked={status === 1} disabled />),
+            align: 'center'
+        }
     ];
 
     const handleOpenEdit = (record: Product) => {

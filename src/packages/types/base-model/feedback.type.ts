@@ -1,9 +1,11 @@
+import type { User } from "./user.type";
+
 type FeedBack = {
     feedbackId: number,
-    userId: number,
+    user: User,
     productId: number,
     comment: string,
-    start: number,
+    star: number,
     date: Date
 }
 

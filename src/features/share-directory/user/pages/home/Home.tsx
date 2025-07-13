@@ -1,4 +1,4 @@
-// import styles from "./Home.module.scss";
+import "./Home.scss";
 import { Carousel } from "antd";
 import { ProductList } from "@repo/component/ui/list/ProductList";
 import { bannerApi, homeApi } from "@repo/packages/services";

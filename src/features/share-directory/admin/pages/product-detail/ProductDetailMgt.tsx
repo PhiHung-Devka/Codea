@@ -104,7 +104,6 @@ const ProductModal = ({ open, onClose, initialValues, productId }: { open: boole
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            // Chuyển đổi color.hexCode thành string nếu là object
             let color = values.color;
             if (typeof color.hexCode === "object" && color.hexCode.metaColor) {
                 const { r, g, b } = color.hexCode.metaColor;
@@ -221,7 +220,7 @@ const ProductModal = ({ open, onClose, initialValues, productId }: { open: boole
                 <Form.Item>
                     <Upload accept="image/*" listType="picture-card" fileList={fileList} onPreview={handlePreview} maxCount={5}
                         onChange={({ fileList }) => setFileList(fileList)} customRequest={customRequest} multiple>
-                        {fileList.length < 5 && "+ Tải ảnh"}
+                        {fileList.length < 2 && "+ Tải ảnh"}
                     </Upload>
                 </Form.Item>
                 <Tabs type="editable-card" activeKey={activeSizeKey} onChange={onTabChange}
@@ -357,6 +356,9 @@ const ProductDetailMgt = () => {
                     Xóa
                 </Button>
             </Flex>,
+            onCell: (record: any) => ({
+                rowSpan: record.colorRowSpan,
+            }),
         },
     ];
 
@@ -365,7 +367,7 @@ const ProductDetailMgt = () => {
             <ProductModal open={isModalOpen} onClose={() => { setIsModalOpen(false); setEditingData(null); }} initialValues={editingData} productId={productId} />
             <Breadcrumb separator=">" items={[
                 { title: <Link to="/admin/product">Danh sách sản phẩm</Link> },
-                { title: 'Chi tiết sản phẩm' }
+                { title: `Chi tiết sản phẩm (${productQuery.data?.name})` }
             ]}
             />
             <Flex justify="right" style={{ marginBottom: 10 }}>
@@ -380,6 +382,7 @@ const ProductDetailMgt = () => {
                         ...col,
                         render: (_: any, record: any) => {
                             const detail = productDetails.find((d: any) => d.color.name === record.color);
+                            if (record.colorRowSpan === 0) return null;
                             return (
                                 <Flex gap={8}>
                                     <Button type="primary" icon={<EditOutlined />} onClick={() => {

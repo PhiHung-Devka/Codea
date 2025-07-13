@@ -7,6 +7,7 @@ type Product = {
     name: string;
     status: number;
     date: Date;
+    description: string;
     productDetails: ProductDetail[]
 };
 

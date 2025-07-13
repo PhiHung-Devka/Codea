@@ -161,7 +161,7 @@ const SocialMgt = () => {
     const notify = useNotify();
     const queryClient = useQueryClient();
     const { pageIndex, pageSize, pagingObj } = usePaginationParams({
-        defaultPageIndex: 1, defaultPageSize: 10, readyUpdate: false,
+        defaultPageIndex: 1, defaultPageSize: 20, readyUpdate: false,
     });
 
     const bannerQuery = socialApi.queries.paginationFilterQuery({ ...pagingObj }, true);

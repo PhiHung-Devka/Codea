@@ -42,7 +42,7 @@ const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
 };
 
 const HeaderComponent = () => {
-    const { user, logout } = useAuthStore();
+    const { user, logout, isAdmin } = useAuthStore();
     const { cartItems } = useCartStore();
     const notify = useNotify();
     const navigate = useNavigate();
@@ -111,11 +111,16 @@ const HeaderComponent = () => {
     ];
 
     const authMenuItems: MenuProps["items"] = user ? [
-        {
-            key: "profile",
-            label: <LinkBasic to={"/account/profile"}>Thông tin tài khoản</LinkBasic>,
+        // {
+        //     key: "profile",
+        //     label: <LinkBasic to={"/account/profile"}>Thông tin tài khoản</LinkBasic>,
+        //     icon: <UserOutlined style={{ fontSize: 16 }} />,
+        // },
+        ...(isAdmin() ? [{
+            key: "admin",
+            label: <LinkBasic to="/admin/banner">Trang admin</LinkBasic>,
             icon: <UserOutlined style={{ fontSize: 16 }} />,
-        },
+        }] : []),
         {
             key: "change-pass",
             label: <LinkBasic to={"/account/change-password"}>Đổi mật khẩu</LinkBasic>,

@@ -24,7 +24,7 @@ const Cart = () => {
         size: item.size,
         price: item.realPrice,
         quantity: item.quantity,
-        total: totalAmount,
+        total: item.realPrice * item.quantity,
     }));
 
     const handleQuantityChange = (key: string, delta: number) => {
@@ -86,6 +86,9 @@ const Cart = () => {
             dataIndex: "total",
             align: 'center',
             render: (total: number) => <span style={{ color: "red", fontWeight: 600 }}>{FormatCurrency(total)}</span>,
+            onCell: (record: any) => ({
+                rowSpan: record.colorRowSpan,
+            }),
         },
     ];
 

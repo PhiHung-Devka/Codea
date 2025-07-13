@@ -32,6 +32,9 @@ const QUERY_KEYS = {
     },
     order: {
         base: "order"
+    },
+    feedback: {
+        base: "feedback"
     }
 };
 

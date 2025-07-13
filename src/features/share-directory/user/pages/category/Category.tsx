@@ -39,7 +39,7 @@ const Category = () => {
     );
 
     const { pageIndex, pageSize, pagingObj, resetPagination } = usePaginationParams({
-        defaultPageIndex: 1, defaultPageSize: 10, readyUpdate: false,
+        defaultPageIndex: 1, defaultPageSize: 20, readyUpdate: false,
     });
 
     const productQuery = productApi.queries.paginationFilterQuery({ ...pagingObj, categoryId }, true);
