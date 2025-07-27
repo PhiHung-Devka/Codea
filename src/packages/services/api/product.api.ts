@@ -43,7 +43,7 @@ const productApi = {
             }),
         detailQuery: (id: number, enabled = true) =>
             useQuery({
-                queryKey: [REPO_CONSTANT.QUERY_KEYS.product.base, id],
+                queryKey: [REPO_CONSTANT.QUERY_KEYS.product.detail, id],
                 queryFn: () => readById(id),
                 enabled
             }),

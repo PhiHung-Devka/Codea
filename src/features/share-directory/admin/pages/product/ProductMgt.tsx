@@ -206,7 +206,7 @@ const Product = () => {
         {
             key: "link",
             title: "Danh mục",
-            dataIndex: "info",
+            dataIndex: "link",
             render: (_, record) => (record.category?.name),
         },
         {

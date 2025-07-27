@@ -24,6 +24,8 @@ const BannerMgt = lazy(() => import("@repo/features/share-directory/admin/pages/
 const SocialMgt = lazy(() => import("@repo/features/share-directory/admin/pages/social/SocialMgt"));
 const ProductMgt = lazy(() => import("@repo/features/share-directory/admin/pages/product/ProductMgt"));
 const ProductDetailMgt = lazy(() => import("@repo/features/share-directory/admin/pages/product-detail/ProductDetailMgt"));
+const OrderMgmt = lazy(() => import("@repo/features/share-directory/admin/pages/order/OrderMgmt"));
+// const OrderDetailMgt = lazy(() => import("@repo/features/share-directory/admin/pages/order-detail/OrderDetailMgt"));
 
 export default function AppRoutes() {
     return (
@@ -44,6 +46,8 @@ export default function AppRoutes() {
                         <Route path="social" element={<SocialMgt />} />
                         <Route path="product" element={<ProductMgt />} />
                         <Route path="product/:id" element={<ProductDetailMgt />} />
+                        <Route path="order" element={<OrderMgmt />} />
+                        {/* <Route path="order/:id" element={<OrderDetailMgt />} /> */}
                     </Route>
                 </Route>
                 <Route element={<UserProtectedRoute />}>

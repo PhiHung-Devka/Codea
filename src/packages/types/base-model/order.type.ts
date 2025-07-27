@@ -1,12 +1,16 @@
+import type { OrderDetail } from "./order-detail.type";
+import type { User } from "./user.type";
+
 type Order = {
     orderId: number,
-    userId: number,
-    voucherId: number,
     totalPrice: number,
     date: Date,
     address: string,
-    status: number,
     phone: string,
+    status: number,
+    user: User,
+    voucherId: number,
+    orderDetails: OrderDetail[]
 }
 
 export type { Order };

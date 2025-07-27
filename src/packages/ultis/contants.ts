@@ -23,7 +23,8 @@ const QUERY_KEYS = {
     },
     product: {
         findAll: "product-all",
-        base: "product"
+        base: "product",
+        detail: "product-detail",
     },
     productDetail: {
         base: "productDetail"
@@ -32,7 +33,8 @@ const QUERY_KEYS = {
         base: "cart"
     },
     order: {
-        base: "order"
+        base: "order",
+        detail: "order-detail",
     },
     feedback: {
         base: "feedback"

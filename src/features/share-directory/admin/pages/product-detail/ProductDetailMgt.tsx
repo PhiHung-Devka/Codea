@@ -78,7 +78,7 @@ const ProductModal = ({ open, onClose, initialValues, productId }: { open: boole
         mutationFn: productDetailApi.apis.create,
         onSuccess: () => {
             notify?.success({ message: "Thêm chi tiết sản phẩm thành công!" });
-            queryClient.invalidateQueries({ queryKey: ["productDetail"] }).then(onClose);
+            queryClient.invalidateQueries({ queryKey: [REPO_CONSTANT.QUERY_KEYS.product.detail] }).then(onClose);
         },
         onError: () => notify?.error({ message: "Thêm chi tiết sản phẩm thất bại!" })
     });
@@ -87,7 +87,7 @@ const ProductModal = ({ open, onClose, initialValues, productId }: { open: boole
         mutationFn: productDetailApi.apis.edit,
         onSuccess: () => {
             notify?.success({ message: "Cập nhật chi tiết sản phẩm thành công!" });
-            queryClient.invalidateQueries({ queryKey: ["productDetail"] }).then(onClose);
+            queryClient.invalidateQueries({ queryKey: [REPO_CONSTANT.QUERY_KEYS.product.detail] }).then(onClose);
         },
         onError: () => notify?.error({ message: "Cập nhật chi tiết sản phẩm thất bại!" })
     });
@@ -96,7 +96,7 @@ const ProductModal = ({ open, onClose, initialValues, productId }: { open: boole
         mutationFn: (id: number) => productDetaiSizelApi.apis._delete(id),
         onSuccess: () => {
             notify?.success({ message: "Xóa kích thước thành công!" });
-            queryClient.invalidateQueries({ queryKey: ["size"] }).then(onClose);
+            queryClient.invalidateQueries({ queryKey: [REPO_CONSTANT.QUERY_KEYS.product.detail] }).then(onClose);
         },
         onError: () => notify?.error({ message: "Xóa kích thước thất bại!" }),
     })
@@ -284,7 +284,7 @@ const ProductDetailMgt = () => {
         mutationFn: (id: number) => productDetailApi.apis._delete(id),
         onSuccess: () => {
             notify?.success({ message: "Xóa kích thước thành công!" });
-            queryClient.invalidateQueries({ queryKey: [REPO_CONSTANT.QUERY_KEYS.productDetail.base] });
+            queryClient.invalidateQueries({ queryKey: [REPO_CONSTANT.QUERY_KEYS.product.detail] });
         },
         onError: () => notify?.error({ message: "Xóa kích thước thất bại!" }),
     })

@@ -1,7 +1,9 @@
+import type { ProductDetailSize } from "./product-detail-size.type";
+
 type OrderDetail = {
     orderDetailId: number,
-    orrderId: number,
-    productDetailSizeId: number,
+    orderId: number,
+    productDetailSize: ProductDetailSize,
     quantity: number
 }
 

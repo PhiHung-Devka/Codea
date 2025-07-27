@@ -193,9 +193,6 @@ const Checkout = () => {
                             <Form.Item name="note">
                                 <TextArea rows={4} placeholder="Ghi chú nếu có" />
                             </Form.Item>
-                            <Button color="default" variant="solid" block style={{ marginTop: 10 }} htmlType="submit">
-                                Đặt hàng ngay
-                            </Button>
                         </Form>
                     </Card>
                     <Card className="boxShadow" style={{ marginTop: 10 }}>

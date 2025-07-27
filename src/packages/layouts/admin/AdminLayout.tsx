@@ -19,6 +19,7 @@ const menuItems = [
     { key: '1', label: 'Quản lý Banner', path: '/admin/banner' },
     { key: '2', label: 'Quản lý mạng xã hội', path: '/admin/social' },
     { key: '3', label: 'Quản lý sản phẩm', path: '/admin/product' },
+    { key: '4', label: 'Quản lý hóa đơn', path: '/admin/order' },
 ];
 
 const AdminLayout = () => {
@@ -32,12 +33,14 @@ const AdminLayout = () => {
         '/admin/banner': '1',
         '/admin/social': '2',
         '/admin/product': '3',
+        '/admin/order': '4',
     };
 
     const pathByKey: Record<string, string> = {
         '1': '/admin/banner',
         '2': '/admin/social',
         '3': '/admin/product',
+        '4': '/admin/order',
     };
 
 

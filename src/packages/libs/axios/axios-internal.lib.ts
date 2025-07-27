@@ -24,7 +24,7 @@ const _postPaging = async <T>(path: string, body: any, config?: AxiosRequestConf
     return resp.data;
 }
 
-const _put = async <T>(path: string, body: any, config?: AxiosRequestConfig) => {
+const _put = async <T>(path: string, body?: any, config?: AxiosRequestConfig) => {
     const resp = await axiosInternalInstance.put<T>(path, body, config);
     return resp.data;
 }
