@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import styles from "./Header.module.scss";
-import { Badge, Button, Flex, Popover, type MenuProps } from "antd";
+import { Badge, Button, Drawer, Flex, Popover, Tree, type MenuProps, type TreeDataNode } from "antd";
 import { DropdownBasic, LinkBasic } from "@repo/component/ui";
-import { UserOutlined, LogoutOutlined, SearchOutlined, LoginOutlined, UserAddOutlined, KeyOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, SearchOutlined, LoginOutlined, UserAddOutlined, KeyOutlined, MenuOutlined } from "@ant-design/icons";
 import Search, { type SearchProps } from "antd/es/input/Search";
 import { useAuthStore } from "@repo/packages/stores";
 import { CartIcon } from "@repo/assets/icons";
@@ -12,6 +12,7 @@ import { categoryApi } from "@repo/packages/services/api/category.api";
 import useCartStore from "@repo/packages/stores/cart/use-cart-store";
 import { FormatCurrency } from "@repo/packages/ultis/common/currency-format";
 import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
+import { useState } from "react";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -146,7 +147,91 @@ const HeaderComponent = () => {
             key: "privacy-policy",
             label: <LinkBasic to={"/portal/privacy-policy"}>Chính sách bảo mật</LinkBasic>
         },
-    ]
+    ];
+
+    const treeData: TreeDataNode[] = [
+        {
+            title: 'Chính sách',
+            key: 'policy',
+            children: [
+                {
+                    title: <LinkBasic to={"/portal/purchase-policy"} color="black">Chính sách mua hàng</LinkBasic>,
+                    key: 'policy-0',
+                },
+                {
+                    title: <LinkBasic to={"/portal/return-policy"} color="black">Chính sách đổi trả</LinkBasic>,
+                    key: 'policy-1'
+                },
+                {
+                    title: <LinkBasic to={"/portal/privacy-policy"} color="black">Chính sách bảo mật</LinkBasic>,
+                    key: 'policy-2'
+                }
+            ],
+        },
+        {
+            title: 'Sản phẩm',
+            key: 'product',
+            children: [
+                {
+                    title: <span onClick={() => { navigate("/portal/category"); setOpen(false); }}>Tất cả sản phẩm</span>,
+                    key: 'product-all'
+                },
+                ...categoryData.map((cat) => ({
+                    title: (
+                        <span onClick={() => {
+                            navigate(`/portal/category?categoryId=${cat.categoryId}`);
+                            setOpen(false);
+                        }}>{cat.name}</span>
+                    ),
+                    key: `product-${cat.categoryId}`
+                }))
+            ],
+        },
+        {
+            title: 'Tài khoản',
+            key: 'account',
+            children: user ? [
+                ...(isAdmin() ? [{
+                    title: <LinkBasic to="/admin/banner" color="black" onClick={() => setOpen(false)}>Trang admin</LinkBasic>,
+                    key: 'account-admin',
+                }] : []),
+                {
+                    title: <LinkBasic to="/account/change-password" color="black" onClick={() => setOpen(false)}>Đổi mật khẩu</LinkBasic>,
+                    key: 'account-change-password',
+                },
+                {
+                    title: <span onClick={() => {
+                        handleLogout();
+                        setOpen(false);
+                    }}>Đăng xuất</span>,
+                    key: 'account-logout',
+                }
+            ] : [
+                {
+                    title: <LinkBasic to="/account/login" color="black" onClick={() => setOpen(false)}>Đăng nhập</LinkBasic>,
+                    key: 'account-login',
+                },
+                {
+                    title: <LinkBasic to="/account/register" color="black" onClick={() => setOpen(false)}>Đăng ký</LinkBasic>,
+                    key: 'account-register',
+                },
+                {
+                    title: <LinkBasic to="/account/forgot-password" color="black" onClick={() => setOpen(false)}>Quên mật khẩu</LinkBasic>,
+                    key: 'account-forgot-password',
+                }
+            ]
+        }
+    ];
+
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
 
     return (
         <header className={styles["hd__stickyHeader"]}>
@@ -165,6 +250,25 @@ const HeaderComponent = () => {
                         </Popover>
                     </div>
                 </Flex>
+            </Flex>
+            <Flex className={styles["hd__topHeaderMobile"]} align="center" justify="space-between">
+                <Flex align="center" justify="space-between" className="container">
+                    <MenuOutlined style={{ color: 'white' }} onClick={showDrawer} />
+                    <LinkBasic to="/portal/home" title="Codea">
+                        <img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751747464/logo-white_gqyegs.png"
+                            alt="Logo" width={50} />
+                    </LinkBasic>
+                    <div className={clsx(styles["hd__topHeader--text"], styles["hd__topHeader--cursor"])}>
+                        <LinkBasic to="/portal/cart" title="Giỏ hàng">
+                            <Badge dot={cartItemCount.length > 0} size="small" style={{ marginLeft: 10 }}>
+                                <CartIcon style={{ width: "auto", height: "24px" }} />
+                            </Badge>
+                        </LinkBasic>
+                    </div>
+                </Flex>
+                <Drawer title="Danh mục" placement="left" closable={false} onClose={onClose} open={open} key={"left"}>
+                    <Tree showLine treeData={treeData} />
+                </Drawer>
             </Flex>
             <header className="container">
                 <Flex gap={190} align="center" justify="space-evenly" className={styles["hd__midHeader"]}>

@@ -2,5 +2,10 @@
     img {
         height: 750px !important;
         object-fit: cover !important;
+
+        @media (max-width: 576px) {
+            height: 260px !important;
+            object-fit: contain !important;
+        }
     }
 }

@@ -4,6 +4,15 @@
     font-weight: $font-weight-bold;
 }
 
+.support {
+    padding-top: $padding-md;
+    background-color: #D1D1D1;
+
+    @media (max-width: 576px) {
+        display: none;
+    }
+}
+
 .box {
     padding: $padding-lg $padding-4xl;
     text-align: center;
@@ -25,9 +34,18 @@
     padding: $padding-6xl 0;
     color: $color-base-white;
 
-    &__logoText {
-        @include ftText($font-size-sm);
-        letter-spacing: 8px;
+    &__address {
+        font-size: $font-size-xs;
+        color: #999999;
+    }
+
+    &__logo {
+        gap: 10px;
+
+        &--text {
+            @include ftText($font-size-sm);
+            letter-spacing: 8px;
+        }
     }
 
     &__mailChip {

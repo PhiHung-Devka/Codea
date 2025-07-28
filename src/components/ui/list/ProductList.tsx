@@ -58,7 +58,7 @@ export const ProductList = ({ products, source }: ProductListProps) => {
                         ]}
                     >
                         {section.products.map((p: any) => (
-                            <Col key={p.productId} className="gutter-row" span={6}>
+                            <Col key={p.productId} className="gutter-row" xs={12} sm={12} md={6}>
                                 <Link to={`/portal/product/${p.productId}`}>
                                     <CardBasic {...p} />
                                 </Link>

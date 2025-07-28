@@ -3,6 +3,7 @@ import { Card, Flex, Tooltip } from "antd";
 import styles from "./Card.module.scss";
 import { memo } from "react";
 import { FormatCurrency } from "@repo/packages/ultis/common/currency-format";
+import { RenderCondition } from "../common/RenderCondition";
 const { Meta } = Card;
 
 export const CardBasic = memo(({ ...props }: ProductPreview) => {
@@ -17,7 +18,9 @@ export const CardBasic = memo(({ ...props }: ProductPreview) => {
             <Meta title={<Tooltip title={props.name}>{props.name}</Tooltip>}
                 description={<Flex align="center" justify="center" gap={10}>
                     <span className={styles["cd__textPrice"]}>{FormatCurrency(props.realPrice)}</span>
-                    <del>{FormatCurrency(props.price)}</del>
+                    <RenderCondition condition={props.price !== props.realPrice}>
+                        <del>{FormatCurrency(props.price)}</del>
+                    </RenderCondition>
                 </Flex>} />
         </Card>
     )

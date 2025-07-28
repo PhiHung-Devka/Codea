@@ -10,6 +10,23 @@
         background-color: black;
         padding: $padding-xs 0;
         height: 50px;
+
+        @media (max-width: 576px) {
+            display: none;
+        }
+    }
+
+    &__topHeaderMobile {
+        background-color: black;
+        padding: $padding-xs 0;
+
+        @media (min-width: 576px) {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            display: block;
+        }
     }
 
     &__midHeader {
@@ -22,6 +39,10 @@
             &:hover {
                 color: $color-gray-scale-40;
             }
+        }
+
+        @media (max-width: 576px) {
+            display: none;
         }
     }
 }

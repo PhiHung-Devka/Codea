@@ -15,7 +15,7 @@ const FooterComponent = () => {
 
     return (
         <footer>
-            <div style={{ backgroundColor: '#D1D1D1', marginTop: 20 }}>
+            <div className={styles["support"]}>
                 <Flex align="center" justify="space-evenly">
                     {supportBoxes.map(({ icon, iconUrl, title, desc }, index) => (
                         <React.Fragment key={index}>
@@ -39,18 +39,18 @@ const FooterComponent = () => {
             </div>
             <div className={styles["ft"]}>
                 <div className="container">
-                    <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-                        <Col className="gutter-row" span={7}>
-                            <Flex gap={10} align="center">
+                    <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
+                        <Col className="gutter-row" xs={24} sm={24} md={7}>
+                            <Flex align="center" className={styles["ft__logo"]}>
                                 <img src="https://res.cloudinary.com/dydx2mqqw/image/upload/v1751747464/logo-white_gqyegs.png" alt="Codea" width={100} />
-                                <span className={styles["ft__logoText"]}>Codea</span>
+                                <span className={styles["ft__logo--text"]}>Codea</span>
                             </Flex>
-                            <span style={{ color: '#999999', fontSize: 16 }}>
+                            <span className={styles["ft__address"]}>
                                 Điện thoại: +84 344966647 (Ms. Kim)<br />
                                 Địa chỉ: 64 Nguyễn Thành Phương, Thống Nhất, Biên Hoà, Đồng Nai
                             </span>
                         </Col>
-                        <Col className="gutter-row" span={8}>
+                        <Col className="gutter-row" xs={24} sm={24} md={8}>
                             <div className={styles["ft__mailChip"]}>
                                 <span className={styles["ft__mailChip--header"]}>Đăng ký nhận tin thông báo</span>
                                 <form action="">
@@ -68,7 +68,7 @@ const FooterComponent = () => {
                                 </Flex>
                             </div>
                         </Col>
-                        <Col className="gutter-row" span={5}>
+                        <Col className="gutter-row" xs={24} sm={24} md={5}>
                             <span className={styles["ft__clickMe--header"]}>Về chúng tôi</span>
                             <Flex vertical gap={15} className={styles["ft__clickMe--content"]}>
                                 {aboutLinks.map(({ href, label }, index) => (
@@ -76,7 +76,7 @@ const FooterComponent = () => {
                                 ))}
                             </Flex>
                         </Col>
-                        <Col className="gutter-row" span={4}>
+                        <Col className="gutter-row" xs={24} sm={24} md={4}>
                             <span className={styles["ft__clickMe--header"]}>Chính sách</span>
                             <Flex vertical gap={15} className={styles["ft__clickMe--content"]}>
                                 {policyLinks.map(({ href, label }, index) => (

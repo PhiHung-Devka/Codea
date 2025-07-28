@@ -211,7 +211,7 @@ const ProductDetail = () => {
         }}>
             <section className="container">
                 <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 8, sm: 16, md: 24, lg: 32 }]} style={{ marginTop: 20 }}>
-                    <Col span={13}>
+                    <Col xs={24} sm={24} md={13}>
                         <Image src={selectedImageUrl} alt={colorName} width="100%" style={{ objectFit: "contain" }} />
                         <section className="embla">
                             <div className="embla__viewport" ref={emblaRef}>
@@ -234,14 +234,14 @@ const ProductDetail = () => {
                             </div>
                         </section>
                     </Col>
-                    <Col span={11}>
+                    <Col xs={24} sm={24} md={11}>
                         <div className={styles["pdd__titleHead"]}>{detailQuery.data?.name}</div>
                         <Flex align="center" gap={10} className={styles["pdd__priceBox"]}>
                             <div className={styles["pdd__priceBox--specialPrice"]}>{price}</div>
-                            <span className={styles["pdd__priceBox--oldPrice"]}>{oldPrice}</span>
-                            {discount && discount !== "0" && (
-                                <span className={styles["pdd__priceBox--savePrice"]}>{discount}</span>
-                            )}
+                            <RenderCondition condition={discount !== "0"}>
+                                <span className={styles["pdd__priceBox--oldPrice"]}>{oldPrice}</span>
+                                <span className={styles["pdd__priceBox--savePrice"]}>{discount}</span>+
+                            </RenderCondition>
                         </Flex>
                         <Flex align="center" gap={5} className={styles["pdd__stockTitle"]} style={{ marginBottom: 10 }}>
                             Loại:
