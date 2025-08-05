@@ -47,7 +47,7 @@ const FooterComponent = () => {
                             </Flex>
                             <span className={styles["ft__address"]}>
                                 Điện thoại: +84 344966647 (Ms. Kim)<br />
-                                Địa chỉ: 64 Nguyễn Thành Phương, Thống Nhất, Biên Hoà, Đồng Nai
+                                Địa chỉ: 64 Nguyễn Thành Phương, Trấn Biên, Đồng Nai
                             </span>
                         </Col>
                         <Col className="gutter-row" xs={24} sm={24} md={8}>
