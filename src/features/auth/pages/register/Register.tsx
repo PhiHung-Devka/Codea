@@ -88,8 +88,8 @@ const Register = () => {
     };
 
     return (
-        <Row justify={"center"} align={"middle"}>
-            <Col span={10}>
+        <Row justify={"center"} align={"middle"} style={{ margin: '10px 0' }}>
+            <Col xs={18} sm={18} md={6}>
                 <Card title="Đăng ký tài khoản" className="boxShadow" styles={{
                     header: {
                         textAlign: 'center',

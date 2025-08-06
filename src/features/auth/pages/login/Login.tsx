@@ -26,8 +26,8 @@ const Login = () => {
 
     return (
         <ConfigProvider theme={{ token: { colorPrimary: 'black' } }}>
-            <Row justify={"center"} align={"middle"}>
-                <Col span={8}>
+            <Row justify={"center"} align={"middle"} style={{ margin: '10px 0' }}>
+                <Col xs={18} sm={18} md={6}>
                     <Card title="Đăng nhập tài khoản" className="boxShadow" styles={{
                         header: {
                             textAlign: 'center',
