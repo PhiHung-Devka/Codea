@@ -1,12 +1,12 @@
-type LoginBody = {
-    email: string;
-    password: string;
-};
+import type { User } from "../base-model";
 
-type ChangePasswordRequest = {
-    email: string;
+type LoginBody = Pick<User, "email" | "password">;
+
+type ChangePasswordRequest = Pick<User, "email"> & {
     oldPassword: string;
     newPassword: string;
 };
 
-export type { LoginBody, ChangePasswordRequest };
+type RegisterPayload = Pick<User, "email" | "fullname" | "password">;
+
+export type { LoginBody, ChangePasswordRequest, RegisterPayload };

@@ -1,6 +1,6 @@
 import { axiosInternalMethod } from "@repo/packages/libs";
 import type { User } from "@repo/packages/types";
-import type { ChangePasswordRequest, LoginBody } from "@repo/packages/types/domain/account.type";
+import type { ChangePasswordRequest, LoginBody, RegisterPayload } from "@repo/packages/types/domain/account.type";
 import REPO_CONSTANT from "@repo/packages/ultis/contants";
 import { useQuery } from "@tanstack/react-query";
 
@@ -22,7 +22,7 @@ const loginApi = async (body: LoginBody) => {
     }
 };
 
-const otpForRegister = async (body: User) => {
+const otpForRegister = async (body: RegisterPayload) => {
     const resp = await axiosInternalMethod._post(mergePath("/register/send-otp"), body);
     return resp;
 };

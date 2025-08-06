@@ -1,9 +1,14 @@
 import { LinkBasic } from '@repo/component/ui';
 import { RenderCondition } from '@repo/component/ui/common/RenderCondition';
 import { LabelDivider } from '@repo/component/ui/label/LabelDivider';
+import { useNotify } from '@repo/component/ui/notification/Notification';
+import { userApi } from '@repo/packages/services';
+import type { RegisterPayload } from '@repo/packages/types/domain/account.type';
+import { useMutation } from '@tanstack/react-query';
 import type { GetProps } from 'antd';
 import { Button, Card, Col, Divider, Form, Input, Row } from 'antd';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type OTPProps = GetProps<typeof Input.OTP>;
 
@@ -14,10 +19,43 @@ const formItemLayout = {
 
 const Register = () => {
     const [countdown, setCountdown] = useState<number>(0);
+    const notify = useNotify();
     const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const otpLength = 4;
+
+    const mutationSendOtp = useMutation({
+        mutationFn: userApi.apis.otpForRegister,
+        onSuccess: () => { notify?.success({ message: "Gửi otp thành công!" }) },
+        onError: (err: any) => {
+            const message = typeof err === "string" ? err : err?.message || err?.error || "Vui lòng thử lại.";
+            notify?.error({ message: "Gửi otp thất bại!", description: message });
+        }
+    });
+
+    const mutationVerify = useMutation({
+        mutationFn: (vars: { email: string; otp: string }) =>
+            userApi.apis.verifyOtpRegister(vars.email, vars.otp),
+        onSuccess: () => {
+            notify?.success({ message: "Đăng ký thành công!" });
+            navigate("/portal/home");
+        },
+        onError: (err: any) => {
+            const msg = typeof err === "string" ? err : err?.message || err?.error || "Vui lòng thử lại.";
+            notify?.error({ message: "Đăng ký thất bại!", description: msg });
+        },
+    });
+
     const onFinish = (values: any) => {
-        console.log('Received values of form: ', values);
-        alert('Đăng ký thành công!');
+        const email: string = values.email;
+        const otp: string = values.otp;
+
+        if (!otp || otp.length !== otpLength) {
+            notify?.error({ message: `Vui lòng nhập mã OTP ${otpLength} chữ số.` });
+            return;
+        }
+
+        mutationVerify.mutate({ email, otp });
     };
 
     const otpProps: OTPProps = {
@@ -31,7 +69,21 @@ const Register = () => {
         return () => clearTimeout(timer);
     }, [countdown]);
 
-    const handleSendOTP = () => {
+    const handleSendOTP = async () => {
+        try {
+            await form.validateFields(['email', 'fullname', 'password', 'confirm']);
+        } catch {
+            notify?.error({ message: 'Vui lòng điền đúng thông tin trước khi gửi mã OTP.' });
+            return;
+        }
+
+        const payload: RegisterPayload = {
+            email: form.getFieldValue('email'),
+            fullname: form.getFieldValue('fullname'),
+            password: form.getFieldValue('password'),
+        };
+
+        mutationSendOtp.mutate(payload);
         setCountdown(60);
     };
 
