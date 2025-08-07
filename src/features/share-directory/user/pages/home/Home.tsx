@@ -2,10 +2,16 @@ import "./Home.scss";
 import { Carousel } from "antd";
 import { ProductList } from "@repo/component/ui/list/ProductList";
 import { bannerApi, homeApi } from "@repo/packages/services";
+import useEmblaCarousel from "embla-carousel-react";
+import type { EmblaOptionsType } from "embla-carousel";
+import { CardBasic } from "@repo/component/ui";
 
 const Home = () => {
     const bannerQuery = bannerApi.queries.readQuery();
     const homeProduct = homeApi.queries.readQuery();
+    const saleProduct = homeApi.queries.saleQuery();
+    const options: EmblaOptionsType = { align: 'start', slidesToScroll: 'auto' };
+    const [emblaRef] = useEmblaCarousel(options);
 
     return (
         <section>
@@ -15,6 +21,20 @@ const Home = () => {
                         <img key={item.bannerId} src={item.bannerUrl} alt={item.bannerUrl} style={{ width: '100%' }} />
                     ))}
                 </Carousel>
+            </div>
+            <div className="embla">
+                <span className="embla_sale">Khuyến mãi</span>
+                <section className="embla_wrapper">
+                    <div className="embla__viewport" ref={emblaRef}>
+                        <div className="embla__container">
+                            {saleProduct.data?.products.map((product) => (
+                                <div className="embla__slide" key={product.productId}>
+                                    <CardBasic {...product} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
             </div>
             <div className="container">
                 <div>

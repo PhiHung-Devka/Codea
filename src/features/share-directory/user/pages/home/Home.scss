@@ -9,3 +9,44 @@
         }
     }
 }
+
+.embla {
+    background-color: $color-gray-scale-20;
+    padding: 25px 25px 0;
+    margin: 30px;
+    border-radius: 8px;
+
+    .embla_sale {
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: red;
+    }
+
+    .embla_wrapper {
+        margin: auto;
+        padding-top: 25px;
+
+        .embla__viewport {
+            overflow: hidden;
+
+            .embla__container {
+                display: flex;
+                touch-action: pan-y pinch-zoom;
+                margin-left: calc(1rem * -1);
+
+                .embla__slide {
+                    transform: translate3d(0, 0, 0);
+                    flex: 0 0 25%;
+                    min-width: 0;
+                    padding-left: 1rem;
+
+                    .embla__slide__img {
+                        padding: 5px;
+                        border-radius: 4px;
+                    }
+                }
+            }
+        }
+    }
+}
