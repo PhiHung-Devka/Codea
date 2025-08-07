@@ -12,7 +12,7 @@ const read = async () => {
 };
 
 const readSale = async () => {
-    const resp = await axiosInternalMethod._get<HomeProduct[]>(mergePath("/sale"));
+    const resp = await axiosInternalMethod._get<HomeProduct>(mergePath("/sale"));
     return resp;
 };
 

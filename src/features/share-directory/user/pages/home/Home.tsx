@@ -5,6 +5,7 @@ import { bannerApi, homeApi } from "@repo/packages/services";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
 import { CardBasic } from "@repo/component/ui";
+import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
 
 const Home = () => {
     const bannerQuery = bannerApi.queries.readQuery();
@@ -22,20 +23,22 @@ const Home = () => {
                     ))}
                 </Carousel>
             </div>
-            <div className="embla">
-                <span className="embla_sale">Khuyến mãi</span>
-                <section className="embla_wrapper">
-                    <div className="embla__viewport" ref={emblaRef}>
-                        <div className="embla__container">
-                            {saleProduct.data?.products.map((product) => (
-                                <div className="embla__slide" key={product.productId}>
-                                    <CardBasic {...product} />
-                                </div>
-                            ))}
+            <RenderCondition condition={!!saleProduct.data}>
+                <div className="embla">
+                    <span className="embla_sale">Khuyến mãi</span>
+                    <section className="embla_wrapper">
+                        <div className="embla__viewport" ref={emblaRef}>
+                            <div className="embla__container">
+                                {saleProduct.data?.products.map(p => (
+                                    <div className="embla__slide" key={p.productId}>
+                                        <CardBasic {...p} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </section>
-            </div>
+                    </section>
+                </div>
+            </RenderCondition>
             <div className="container">
                 <div>
                     <ProductList products={homeProduct.data ?? []} />
