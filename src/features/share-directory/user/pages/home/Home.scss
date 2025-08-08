@@ -11,7 +11,7 @@
 }
 
 .embla {
-    background-color: $color-gray-scale-20;
+    background-color: #c9dfff;
     padding: 25px 25px 0;
     margin: 30px;
     border-radius: 8px;
@@ -20,7 +20,6 @@
         font-size: 18px;
         font-weight: bold;
         letter-spacing: 2px;
-        color: red;
     }
 
     .embla_wrapper {
@@ -44,6 +43,10 @@
                     .embla__slide__img {
                         padding: 5px;
                         border-radius: 4px;
+                    }
+
+                    @media (max-width: 576px) {
+                        flex: 0 0 100% !important;
                     }
                 }
             }

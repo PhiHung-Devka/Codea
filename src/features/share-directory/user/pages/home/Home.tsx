@@ -6,13 +6,15 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
 import { CardBasic } from "@repo/component/ui";
 import { RenderCondition } from "@repo/component/ui/common/RenderCondition";
+import Autoplay from "embla-carousel-autoplay";
 
 const Home = () => {
     const bannerQuery = bannerApi.queries.readQuery();
     const homeProduct = homeApi.queries.readQuery();
     const saleProduct = homeApi.queries.saleQuery();
-    const options: EmblaOptionsType = { align: 'start', slidesToScroll: 'auto' };
-    const [emblaRef] = useEmblaCarousel(options);
+    const options: EmblaOptionsType = { align: 'start', slidesToScroll: 'auto', loop: true };
+    const autoplayOptions = { delay: 3000, stopOnInteraction: false };
+    const [emblaRef] = useEmblaCarousel(options, [Autoplay(autoplayOptions)]);
 
     return (
         <section>
@@ -25,7 +27,7 @@ const Home = () => {
             </div>
             <RenderCondition condition={!!saleProduct.data}>
                 <div className="embla">
-                    <span className="embla_sale">Khuyến mãi</span>
+                    <span className="embla_sale">SALE OFF</span>
                     <section className="embla_wrapper">
                         <div className="embla__viewport" ref={emblaRef}>
                             <div className="embla__container">
